@@ -20,6 +20,26 @@ margin-top:100px;
 font-size:32px;
 color:#38bdf8;
 }
+.navbar {
+background:#020617;
+padding:15px;
+display:flex;
+justify-content:center;
+gap:20px;
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+.navbar a {
+color:#fff;
+text-decoration:none;
+font-weight:bold;
+}
+
+.navbar a:hover {
+color:#38bdf8;
+}
 .small-btn {
 padding:5px 10px;
 margin:5px;
