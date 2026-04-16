@@ -2,35 +2,36 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Build Without Loss</title>
+<title>Contractor Decision System</title>
 
 <style>
 body {
 font-family: Arial;
-background:#111;
+background:#0f172a;
 color:#fff;
 padding:20px;
-line-height:1.8;
 }
 .container { max-width:900px; margin:auto;}
+
 .card {
-background:#222;
+background:#1e293b;
 padding:15px;
 margin-top:15px;
-border-radius:8px;
+border-radius:10px;
 }
-h1 { color:#0f0; }
+
+h1 { color:#38bdf8; }
 
 input {
 width:100%;
 padding:10px;
-margin-top:10px;
+margin-top:8px;
 border-radius:5px;
 border:none;
 }
 
 button {
-background:#0f0;
+background:#38bdf8;
 border:none;
 padding:12px;
 width:100%;
@@ -40,18 +41,16 @@ cursor:pointer;
 border-radius:5px;
 }
 
-button:hover { opacity:0.9; }
-
 .item {
-background:#333;
+background:#334155;
 padding:10px;
 margin-top:10px;
 border-radius:6px;
 }
 
-.score { color:#0f0; }
-.red { color:#ff4d4d; }
-.green { color:#0f0; }
+.best { border:2px solid #22c55e; }
+.worst { border:2px solid #ef4444; }
+
 </style>
 
 </head>
@@ -60,48 +59,36 @@ border-radius:6px;
 
 <div class="container">
 
-<h1>🏗️ Build Without Loss</h1>
+<h1>🏗️ Contractor Decision System</h1>
 
-<!-- LESSON -->
 <div class="card">
-<h2>🎬 ليش تختار مقاول غلط؟</h2>
-<p>أغلب الناس تختار بناءً على شعور… مو نظام</p>
+<h2>إضافة مقاول</h2>
 
 <input id="name" placeholder="اسم المقاول">
+<input id="price" placeholder="السعر">
 
-<h3>ليش اخترته؟</h3>
+<label>وضوح (1-5)</label>
+<input type="number" id="clarity">
 
-<button onclick="add('راحة')">ارتحت له</button>
-<button onclick="add('توصية')">توصية</button>
-<button onclick="add('سعر')">سعر</button>
-<button onclick="add('خبرة')">خبرة</button>
+<label>تنظيم (1-5)</label>
+<input type="number" id="org">
+
+<label>فريق (1-5)</label>
+<input type="number" id="team">
+
+<button onclick="add()">إضافة</button>
 
 </div>
 
-<!-- LIST -->
 <div class="card">
-<h2>📊 المقاولين</h2>
+<h2>📊 التقييم</h2>
 <div id="list"></div>
 </div>
 
-<!-- DECISION -->
 <div class="card">
-<h2>🏆 القرار النهائي</h2>
-
-<button onclick="decide()">اختار لي الأفضل</button>
-
+<h2>🏆 القرار</h2>
+<button onclick="decide()">اختار الأفضل</button>
 <div id="decision"></div>
-</div>
-
-<!-- ERRORS -->
-<div class="card">
-<h2>🧠 أخطاء شائعة</h2>
-
-<p class="red">❌ اختيار عاطفي</p>
-<p class="red">❌ الاعتماد على السعر فقط</p>
-<p class="red">❌ التوصية فقط</p>
-
-<p>السعر الأقل قد يكون الأعلى تكلفة فعليًا</p>
 </div>
 
 </div>
@@ -110,48 +97,24 @@ border-radius:6px;
 
 let contractors = JSON.parse(localStorage.getItem("contractors")) || [];
 
-function add(type){
+function add(){
 
 let name = document.getElementById("name").value;
+let price = document.getElementById("price").value;
+let clarity = +document.getElementById("clarity").value;
+let org = +document.getElementById("org").value;
+let team = +document.getElementById("team").value;
 
-if(!name){
-alert("اكتب اسم المقاول");
+if(!name || !clarity || !org || !team){
+alert("كمل البيانات");
 return;
 }
 
-let score = 0;
-let note = "";
-let behavior = "";
+let score = clarity + org + team;
 
-// تحليل
-if(type === "راحة"){
-score = 1;
-note = "اختيار عاطفي ⚠️";
-behavior = "عاطفي";
-}
-else if(type === "توصية"){
-score = 2;
-note = "اعتماد على الآخرين";
-behavior = "تابع";
-}
-else if(type === "سعر"){
-score = 2;
-note = "اختيار مالي";
-behavior = "مالي";
-}
-else if(type === "خبرة"){
-score = 4;
-note = "اختيار واعي";
-behavior = "واعي";
-}
+contractors.push({name, price, score, clarity, org, team});
 
-contractors.push({name, score, note, behavior});
-
-// حفظ
 localStorage.setItem("contractors", JSON.stringify(contractors));
-
-// تنظيف
-document.getElementById("name").value = "";
 
 render();
 }
@@ -161,15 +124,26 @@ function render(){
 let list = document.getElementById("list");
 list.innerHTML = "";
 
-// ترتيب
+if(contractors.length === 0) return;
+
 contractors.sort((a,b)=>b.score - a.score);
 
+let bestScore = contractors[0].score;
+let worstScore = contractors[contractors.length-1].score;
+
 contractors.forEach(c=>{
+
+let className = "item";
+
+if(c.score === bestScore) className += " best";
+if(c.score === worstScore) className += " worst";
+
 list.innerHTML += `
-<div class="item">
+<div class="${className}">
 <b>${c.name}</b><br>
-<span class="score">Score: ${c.score}</span><br>
-${c.note}
+السعر: ${c.price}<br>
+Score: ${c.score}<br>
+وضوح: ${c.clarity} | تنظيم: ${c.org} | فريق: ${c.team}
 </div>
 `;
 });
@@ -178,55 +152,32 @@ ${c.note}
 function decide(){
 
 if(contractors.length === 0){
-document.getElementById("decision").innerHTML =
-"⚠️ ما أضفت أي مقاول";
+document.getElementById("decision").innerHTML = "❌ ما عندك بيانات";
 return;
 }
 
-// ترتيب
 contractors.sort((a,b)=>b.score - a.score);
 
 let best = contractors[0];
 
-// تحليل السلوك العام
-let behaviors = contractors.map(c => c.behavior);
-
-let emotionalCount = behaviors.filter(b=>b==="عاطفي").length;
-let financialCount = behaviors.filter(b=>b==="مالي").length;
-
-let warning = "";
-
-// تحليل نفسي
-if(emotionalCount > 0){
-warning = "⚠️ واضح أنك تميل للاختيار العاطفي — انتبه هذا أخطر سبب خسارة";
-}
-else if(financialCount > 0){
-warning = "⚠️ واضح أنك تركز على السعر — انتبه السعر قد يكون خدعة";
-}
-else{
-warning = "✅ قراراتك متزنة نسبيًا";
-}
-
-// تحليل الجودة
-let decisionMsg = "";
-
-if(best.score <= 2){
-decisionMsg = "❌ كل خياراتك ضعيفة — لازم تعيد التقييم من البداية";
-}
-else{
-decisionMsg = "🏆 هذا أفضل مقاول بناءً على تقييمك الحالي";
-}
-
-// عرض النتيجة
-document.getElementById("decision").innerHTML = `
-<h3>${best.name}</h3>
-<p>Score: ${best.score}</p>
-<p>${decisionMsg}</p>
-<p>${warning}</p>
+let msg = `
+🏆 الأفضل: ${best.name}<br>
+Score: ${best.score}<br><br>
 `;
+
+if(best.score >= 12){
+msg += "✅ مقاول قوي جدًا";
+}
+else if(best.score >= 8){
+msg += "⚠️ مقبول لكن يحتاج تدقيق";
+}
+else{
+msg += "❌ ضعيف — لا ينصح فيه";
 }
 
-// تشغيل
+document.getElementById("decision").innerHTML = msg;
+}
+
 render();
 
 </script>
