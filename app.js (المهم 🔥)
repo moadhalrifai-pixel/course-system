@@ -1,0 +1,47 @@
+let contractors = JSON.parse(localStorage.getItem("contractors")) || [];
+
+function save(){
+
+let name = document.getElementById("name").value;
+let price = +document.getElementById("price").value;
+let clarity = +document.getElementById("clarity").value;
+let org = +document.getElementById("org").value;
+let team = +document.getElementById("team").value;
+
+let score = clarity + org + team;
+
+contractors.push({name, price, score});
+
+localStorage.setItem("contractors", JSON.stringify(contractors));
+
+render();
+}
+
+function render(){
+
+let list = document.getElementById("list");
+list.innerHTML = "";
+
+contractors.forEach(c=>{
+list.innerHTML += `
+<div class="item">
+<b>${c.name}</b><br>
+Score: ${c.score}
+</div>
+`;
+});
+}
+
+function decide(){
+
+if(contractors.length === 0) return;
+
+contractors.sort((a,b)=>b.score - a.score);
+
+let best = contractors[0];
+
+document.getElementById("decision").innerHTML =
+`🏆 الأفضل: ${best.name}`;
+}
+
+render();
