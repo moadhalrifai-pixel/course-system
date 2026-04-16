@@ -2,27 +2,188 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>الدرس 1</title>
+<title>الدرس 1 - لعبة القرار</title>
 <link rel="stylesheet" href="style.css">
+
+<style>
+.screen { display:none; }
+.active { display:block; }
+.choice { 
+display:block;
+margin-top:10px;
+padding:12px;
+background:#1e293b;
+border-radius:8px;
+cursor:pointer;
+}
+.choice:hover { background:#334155; }
+</style>
+
 </head>
 
 <body>
 
 <div class="navbar">
 <a href="index.html">🏠 الرئيسية</a>
-<a href="lesson1.html">🎬 الدروس</a>
+<a href="dashboard.html">📊 المشاريع</a>
 <a href="tool.html">📊 النظام</a>
 </div>
 
 <div class="container">
 
-<div class="card">💣 المشكلة تبدأ قبل اختيار المقاول</div>
-<div class="card">⚠️ أول قرار = بداية النتيجة</div>
-<div class="card">🧠 لا تبحث عن مقاول… ابنِ نظام</div>
+<!-- 🎬 Screen 1 -->
+<div class="screen active">
+<h2>🏗️ أنت الآن على وشك تبني بيتك</h2>
+<p>أول خطوة… تختار المقاول</p>
 
-<a href="lesson2.html" class="btn">التالي →</a>
+<div class="choice" onclick="go(1)">أبغى أرخص واحد</div>
+<div class="choice" onclick="go(2)">أبغى واحد شكله محترم</div>
+<div class="choice" onclick="go(3)">أبغى واحد معروف</div>
+</div>
+
+<!-- ❌ Path 1 -->
+<div class="screen">
+<h2>💸 اخترت الأرخص</h2>
+<p>بالبداية وفرت… لكن:</p>
+
+<ul>
+<li>بنود ناقصة</li>
+<li>تغييرات لاحقة</li>
+<li>تكلفة تضاعفت</li>
+</ul>
+
+<p>❌ أنت ما وفرت… أنت تأجلت الخسارة</p>
+
+<button onclick="next()">التالي</button>
+</div>
+
+<!-- ❌ Path 2 -->
+<div class="screen">
+<h2>😌 اخترت حسب الشعور</h2>
+<p>ارتحت له… لكن:</p>
+
+<ul>
+<li>ما فيه نظام</li>
+<li>ما فيه تفاصيل</li>
+<li>قرارات عشوائية</li>
+</ul>
+
+<p>❌ الشعور لا يدير مشروع</p>
+
+<button onclick="next()">التالي</button>
+</div>
+
+<!-- ❌ Path 3 -->
+<div class="screen">
+<h2>⭐ اخترت “المعروف”</h2>
+<p>سمعته طيبة… لكن:</p>
+
+<ul>
+<li>مشروعك مختلف</li>
+<li>نطاق غير واضح</li>
+<li>توقعات غير مكتوبة</li>
+</ul>
+
+<p>❌ السمعة ليست نظام</p>
+
+<button onclick="next()">التالي</button>
+</div>
+
+<!-- 🔥 الحقيقة -->
+<div class="screen">
+<h2>💣 الحقيقة الصادمة</h2>
+
+<p>
+المشكلة مو في المقاول…
+</p>
+
+<p>
+<strong>المشكلة في طريقة اختيارك</strong>
+</p>
+
+<p>
+كل الخيارات اللي اخترتها كانت:
+</p>
+
+<ul>
+<li>سعر</li>
+<li>شعور</li>
+<li>سمعة</li>
+</ul>
+
+<p>
+❌ ولا واحد منهم نظام
+</p>
+
+<button onclick="next()">التالي</button>
+</div>
+
+<!-- 🧠 فهم اللعبة -->
+<div class="screen">
+<h2>🧠 افهم اللعبة</h2>
+
+<p>المشروع ما يمشي كذا:</p>
+<p>مخططات → عرض → عقد → تنفيذ</p>
+
+<p>الواقع:</p>
+<p>غموض → قرارات سريعة → مشاكل → خسارة</p>
+
+<p>
+⚠️ المشروع يضعف من أول قرار :contentReference[oaicite:1]{index=1}
+</p>
+
+<button onclick="next()">التالي</button>
+</div>
+
+<!-- 🎯 التحول -->
+<div class="screen">
+<h2>🔄 التحول الحقيقي</h2>
+
+<p>مو:</p>
+<p>“أبغى مقاول زين”</p>
+
+<p>بل:</p>
+<p><strong>“أبغى نظام يحميني”</strong></p>
+
+<p>
+كل غموض = خسارة مستقبلية :contentReference[oaicite:2]{index=2}
+</p>
+
+<button onclick="next()">التالي</button>
+</div>
+
+<!-- 🚀 CTA -->
+<div class="screen">
+<h2>🚀 جاهز تختار صح؟</h2>
+
+<p>
+الحين بعد ما فهمت اللعبة…
+</p>
+
+<a href="tool.html" class="btn blue">📊 جرب نظام الاختيار</a>
 
 </div>
+
+</div>
+
+<script>
+
+let screens = document.querySelectorAll(".screen");
+let current = 0;
+
+function go(step){
+screens[current].classList.remove("active");
+current = step;
+screens[current].classList.add("active");
+}
+
+function next(){
+screens[current].classList.remove("active");
+current++;
+screens[current].classList.add("active");
+}
+
+</script>
 
 </body>
 </html>
