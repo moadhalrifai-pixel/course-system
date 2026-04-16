@@ -1,24 +1,37 @@
 let contractors = JSON.parse(localStorage.getItem("contractors")) || [];
+let editIndex = -1;
 
 function save(){
 
-let name = document.getElementById("name").value;
-let price = +document.getElementById("price").value;
-let clarity = +document.getElementById("clarity").value;
-let org = +document.getElementById("org").value;
-let team = +document.getElementById("team").value;
+let name = document.getElementById("name").value.trim();
+let price = parseFloat(document.getElementById("price").value);
+let clarity = parseInt(document.getElementById("clarity").value);
+let org = parseInt(document.getElementById("org").value);
+let team = parseInt(document.getElementById("team").value);
 
-if(!name || !price || !clarity || !org || !team){
-alert("كمل البيانات");
+// تحقق ذكي
+if(!name || isNaN(price) || isNaN(clarity) || isNaN(org) || isNaN(team)){
+alert("⚠️ تأكد من إدخال كل البيانات بشكل صحيح");
 return;
 }
 
 let score = clarity + org + team;
 
-contractors.push({name, price, score});
+let contractor = {name, price, clarity, org, team, score};
+
+// تعديل
+if(editIndex > -1){
+contractors[editIndex] = contractor;
+editIndex = -1;
+}
+else{
+// إضافة
+contractors.push(contractor);
+}
 
 localStorage.setItem("contractors", JSON.stringify(contractors));
 
+clearForm();
 render();
 }
 
@@ -40,10 +53,11 @@ contractors.sort((a,b)=>b.value - a.value);
 
 let bestValue = contractors[0].value;
 
-contractors.forEach(c=>{
+contractors.forEach((c,i)=>{
 
 let tag="", cls="";
 
+// تصنيف احترافي
 if(c.score < 8){
 tag="Risk";
 cls="risk";
@@ -62,33 +76,79 @@ list.innerHTML += `
 <b>${c.name}</b><br>
 Score: ${c.score}<br>
 السعر: ${c.price}<br>
+
 <span class="tag ${cls}">${tag}</span>
+
+<br><br>
+
+<button class="small-btn edit" onclick="edit(${i})">✏️ تعديل</button>
+<button class="small-btn delete" onclick="removeItem(${i})">🗑 حذف</button>
+
 </div>
 `;
 });
 }
 
+function edit(i){
+
+let c = contractors[i];
+
+document.getElementById("name").value = c.name;
+document.getElementById("price").value = c.price;
+document.getElementById("clarity").value = c.clarity;
+document.getElementById("org").value = c.org;
+document.getElementById("team").value = c.team;
+
+editIndex = i;
+
+window.scrollTo({top:0, behavior:"smooth"});
+}
+
+function removeItem(i){
+
+if(confirm("متأكد من الحذف؟")){
+contractors.splice(i,1);
+localStorage.setItem("contractors", JSON.stringify(contractors));
+render();
+}
+}
+
+function clearForm(){
+document.getElementById("name").value = "";
+document.getElementById("price").value = "";
+document.getElementById("clarity").value = "";
+document.getElementById("org").value = "";
+document.getElementById("team").value = "";
+}
+
 function decide(){
 
-if(contractors.length === 0) return;
+if(contractors.length === 0){
+document.getElementById("decision").innerHTML = "❌ ما عندك بيانات";
+return;
+}
 
 contractors.sort((a,b)=>b.value - a.value);
 
 let best = contractors[0];
 
-let avgPrice = contractors.reduce((s,c)=>s+c.priceNum,0)/contractors.length;
+let avgPrice = contractors.reduce((s,c)=>s + c.priceNum,0)/contractors.length;
 
 let msg = `
-🏆 الأفضل: ${best.name}<br>
+🏆 الأفضل: <b>${best.name}</b><br>
 Score: ${best.score}<br>
-السعر: ${best.price}<br><br>
+السعر: ${best.price}<br>
+Value: ${best.value.toFixed(5)}<br><br>
 `;
 
-if(best.price > avgPrice * 1.3){
+if(best.score < 8){
+msg += "❌ مخاطرة عالية";
+}
+else if(best.price > avgPrice * 1.3){
 msg += "⚠️ سعره أعلى من السوق";
 }
 else{
-msg += "🔥 أفضل توازن بالسوق";
+msg += "🔥 أفضل توازن (Smart Choice)";
 }
 
 document.getElementById("decision").innerHTML = msg;
