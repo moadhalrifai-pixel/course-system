@@ -4,19 +4,6 @@
 <meta charset="UTF-8">
 <title>الدرس 1</title>
 <link rel="stylesheet" href="style.css">
-
-<style>
-.slide {
-display:none;
-}
-.active {
-display:block;
-}
-.nav-btn {
-margin-top:20px;
-}
-</style>
-
 </head>
 
 <body>
@@ -29,64 +16,13 @@ margin-top:20px;
 
 <div class="container">
 
-<!-- Slide 1 -->
-<div class="card slide active">
-<h2>💣 الحقيقة</h2>
-<p>أغلب الناس يعتقدون المشكلة تبدأ بعد العقد…</p>
-<button onclick="next()">التالي →</button>
-</div>
+<div class="card">💣 المشكلة تبدأ قبل اختيار المقاول</div>
+<div class="card">⚠️ أول قرار = بداية النتيجة</div>
+<div class="card">🧠 لا تبحث عن مقاول… ابنِ نظام</div>
 
-<!-- Slide 2 -->
-<div class="card slide">
-<h2>⚠️ الصدمة</h2>
-<p>الحقيقة؟ المشكلة تبدأ قبل اختيار المقاول</p>
-<button onclick="next()">التالي →</button>
-</div>
-
-<!-- Slide 3 -->
-<div class="card slide">
-<h2>🎯 الواقع</h2>
-<p>أنت تتخيل المشروع مرتب… لكن الواقع مختلف تمامًا</p>
-<button onclick="next()">التالي →</button>
-</div>
-
-<!-- Slide 4 -->
-<div class="card slide">
-<h2>🧠 القاعدة</h2>
-<p>المشروع ما ينهار فجأة… ينهار من أول قرار</p>
-<button onclick="next()">التالي →</button>
-</div>
-
-<!-- Slide 5 -->
-<div class="card slide">
-<h2>🚀 التحول</h2>
-<p>لا تبحث عن مقاول جيد فقط… ابنِ نظام يحميك</p>
-<button onclick="next()">التالي →</button>
-</div>
-
-<!-- Slide 6 -->
-<div class="card slide">
-<h2>🏁 النهاية</h2>
-<p>إذا فهمت هذا… أنت متقدم 80% عن باقي الملاك</p>
-<a href="lesson2.html" class="btn">🎬 الدرس 2</a>
-</div>
+<a href="lesson2.html" class="btn">التالي →</a>
 
 </div>
-
-<script>
-
-let current = 0;
-let slides = document.querySelectorAll(".slide");
-
-function next(){
-slides[current].classList.remove("active");
-current++;
-if(current < slides.length){
-slides[current].classList.add("active");
-}
-}
-
-</script>
 
 </body>
 </html>
