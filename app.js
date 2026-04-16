@@ -16,7 +16,12 @@ return;
 }
 
 // 🔥 منع التكرار
-let exists = contractors.find(c => c.name === name && editIndex === -1);
+let normalizedName = name.trim().toLowerCase();
+
+let exists = contractors.find(c => 
+c.name.trim().toLowerCase() === normalizedName && editIndex === -1
+);
+
 if(exists){
 alert("⚠️ هذا المقاول مضاف مسبقًا");
 return;
@@ -104,6 +109,21 @@ document.getElementById("team").value = c.team;
 
 editIndex = i;
 
+// 🔥 صعود ذكي
+document.querySelector(".card").scrollIntoView({
+behavior: "smooth",
+block: "center"
+});
+
+// focus واضح
+setTimeout(()=>{
+document.getElementById("name").focus();
+},300);
+
+// تغيير الزر
+document.querySelector(".card button").innerText = "💾 تحديث المقاول";
+}
+
 // 🔥 تحسين UX
 window.scrollTo({top:0, behavior:"smooth"});
 document.getElementById("name").focus();
@@ -137,37 +157,67 @@ document.getElementById("decision").innerHTML = "❌ ما عندك بيانات"
 return;
 }
 
+// حساب القيمة
+contractors.forEach(c=>{
+c.priceNum = parseFloat(c.price);
+c.value = c.score / c.priceNum;
+});
+
+// ترتيب
 contractors.sort((a,b)=>b.value - a.value);
 
 let best = contractors[0];
 
+// متوسط السوق
 let avgPrice = contractors.reduce((s,c)=>s + c.priceNum,0)/contractors.length;
 
+// تحليل
 let msg = `
 🏆 الأفضل: <b>${best.name}</b><br><br>
-Score: ${best.score}<br>
-السعر: ${best.price}<br>
-Value: ${best.value.toFixed(5)}<br><br>
+
+📊 التقييم: ${best.score}<br>
+💰 السعر: ${best.price}<br>
+⚖️ القيمة: ${best.value.toFixed(5)}<br><br>
 `;
 
+// 🔥 تحليل عميق
 if(best.score >= 12 && best.price <= avgPrice){
-msg += "🔥 اختيار ذكي: جودة عالية + سعر مناسب<br>";
+msg += "🔥 هذا أفضل خيار لأن:\n";
+msg += "- تقييمه عالي\n";
+msg += "- سعره ضمن السوق\n";
+msg += "- يعطي أفضل قيمة مقابل السعر<br><br>";
 }
 else if(best.score >= 12 && best.price > avgPrice){
-msg += "⚠️ جودة ممتازة لكن سعره أعلى من السوق<br>";
+msg += "⚠️ هذا المقاول قوي لكن:\n";
+msg += "- سعره أعلى من السوق\n";
+msg += "- تحتاج تفاوض أو بديل<br><br>";
 }
 else if(best.score < 8){
-msg += "❌ مخاطرة: تقييمه ضعيف<br>";
+msg += "❌ هذا الخيار خطير:\n";
+msg += "- تقييمه منخفض\n";
+msg += "- احتمالية مشاكل عالية<br><br>";
 }
 else{
-msg += "📊 خيار متوسط يحتاج مقارنة إضافية<br>";
+msg += "📊 خيار متوسط:\n";
+msg += "- يحتاج مقارنة إضافية\n";
+msg += "- لا يعتمد عليه مباشرة<br><br>";
 }
 
+// مقارنة إضافية
 let cheapest = contractors.reduce((a,b)=>a.priceNum < b.priceNum ? a : b);
 
-msg += `<br>💡 الأرخص: ${cheapest.name}`;
+msg += `💡 الأرخص في السوق: ${cheapest.name}<br>`;
+
+let diff = best.price - avgPrice;
+
+if(diff > 0){
+msg += `💰 أعلى من المتوسط بـ ${diff}`;
+}else{
+msg += `💰 أقل من السوق (ميزة قوية)`;
+}
 
 document.getElementById("decision").innerHTML = msg;
+}
 }
 
 render();
