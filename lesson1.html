@@ -3,54 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Lesson 1</title>
-
-<style>
-body {
-font-family: Arial;
-background:#111;
-color:#fff;
-padding:20px;
-}
-.container { max-width:700px; margin:auto;}
-.card {
-background:#222;
-padding:15px;
-margin-top:15px;
-border-radius:8px;
-}
-h1 { color:#0f0; }
-
-input {
-width:100%;
-padding:10px;
-margin-top:10px;
-}
-
-button {
-background:#0f0;
-border:none;
-padding:12px;
-width:100%;
-margin-top:10px;
-font-weight:bold;
-cursor:pointer;
-border-radius:5px;
-}
-
-.list {
-margin-top:20px;
-}
-
-.item {
-background:#333;
-padding:10px;
-margin-top:10px;
-border-radius:6px;
-}
-
-.score { color:#0f0; }
-</style>
-
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -64,97 +17,15 @@ border-radius:6px;
 </div>
 
 <div class="card">
-⚠️ Red Flags:<br>
-- ارتحت له بسرعة<br>
-- توصية فقط<br>
-- استعجال
+⚠️ Red Flags:
+<br>ارتحت بسرعة
+<br>توصية فقط
+<br>استعجال
 </div>
 
-<div class="card">
-<input id="name" placeholder="اسم المقاول">
-</div>
-
-<div class="card">
-<h3>ليش اخترته؟</h3>
-
-<button onclick="add('راحة')">ارتحت له</button>
-<button onclick="add('توصية')">توصية</button>
-<button onclick="add('سعر')">سعر مناسب</button>
-<button onclick="add('خبرة')">خبرة</button>
+<a href="tool.html" class="btn">التالي → النظام</a>
 
 </div>
-
-<div class="card list" id="list"></div>
-
-</div>
-
-<script>
-
-let contractors = JSON.parse(localStorage.getItem("contractors")) || [];
-
-function add(type){
-
-let name = document.getElementById("name").value;
-
-if(!name){
-alert("اكتب اسم المقاول");
-return;
-}
-
-let score = 0;
-let note = "";
-
-// تحليل
-if(type === "راحة"){
-score = 1;
-note = "اختيار عاطفي ⚠️";
-}
-else if(type === "توصية"){
-score = 2;
-note = "اعتماد على الآخرين ⚠️";
-}
-else if(type === "سعر"){
-score = 2;
-note = "اختيار مالي ⚠️";
-}
-else if(type === "خبرة"){
-score = 4;
-note = "اختيار واعي جزئيًا ✅";
-}
-
-contractors.push({name, score, note});
-
-// حفظ
-localStorage.setItem("contractors", JSON.stringify(contractors));
-
-// تنظيف
-document.getElementById("name").value = "";
-
-render();
-}
-
-function render(){
-
-let list = document.getElementById("list");
-list.innerHTML = "";
-
-// ترتيب
-contractors.sort((a,b)=>b.score - a.score);
-
-contractors.forEach(c=>{
-list.innerHTML += `
-<div class="item">
-<b>${c.name}</b><br>
-<span class="score">تقييم: ${c.score}</span><br>
-${c.note}
-</div>
-`;
-});
-}
-
-render();
-
-</script>
 
 </body>
 </html>
