@@ -10,21 +10,22 @@ font-family: Arial;
 background:#111;
 color:#fff;
 padding:20px;
-line-height:1.8;
 }
-.container {
-max-width:700px;
-margin:auto;
-}
+.container { max-width:700px; margin:auto;}
 .card {
 background:#222;
 padding:15px;
 margin-top:15px;
 border-radius:8px;
 }
-h1 {
-color:#0f0;
+h1 { color:#0f0; }
+
+input {
+width:100%;
+padding:10px;
+margin-top:10px;
 }
+
 button {
 background:#0f0;
 border:none;
@@ -35,11 +36,19 @@ font-weight:bold;
 cursor:pointer;
 border-radius:5px;
 }
-button:hover {
-opacity:0.9;
+
+.list {
+margin-top:20px;
 }
-.red { color:#ff4d4d; }
-.green { color:#0f0; }
+
+.item {
+background:#333;
+padding:10px;
+margin-top:10px;
+border-radius:6px;
+}
+
+.score { color:#0f0; }
 </style>
 
 </head>
@@ -55,74 +64,95 @@ opacity:0.9;
 </div>
 
 <div class="card">
-⚠️ <b>Red Flags:</b><br>
+⚠️ Red Flags:<br>
 - ارتحت له بسرعة<br>
 - توصية فقط<br>
 - استعجال
 </div>
 
 <div class="card">
-<input id="name" placeholder="اكتب اسم المقاول" style="width:100%; padding:10px;">
+<input id="name" placeholder="اسم المقاول">
 </div>
 
 <div class="card">
-
 <h3>ليش اخترته؟</h3>
 
-<button onclick="analyze('راحة')">ارتحت له</button>
-<button onclick="analyze('توصية')">توصية</button>
-<button onclick="analyze('سعر')">سعر مناسب</button>
-<button onclick="analyze('خبرة')">خبرة</button>
+<button onclick="add('راحة')">ارتحت له</button>
+<button onclick="add('توصية')">توصية</button>
+<button onclick="add('سعر')">سعر مناسب</button>
+<button onclick="add('خبرة')">خبرة</button>
 
 </div>
 
-<div class="card" id="out"></div>
+<div class="card list" id="list"></div>
 
 </div>
 
 <script>
 
-function analyze(type){
+let contractors = JSON.parse(localStorage.getItem("contractors")) || [];
+
+function add(type){
 
 let name = document.getElementById("name").value;
 
 if(!name){
-document.getElementById("out").innerHTML = "⚠️ اكتب اسم المقاول أولاً";
+alert("اكتب اسم المقاول");
 return;
 }
 
-let result = "";
-let profile = "";
+let score = 0;
+let note = "";
 
-// التحليل
+// تحليل
 if(type === "راحة"){
-result = "⚠️ اختيارك عاطفي — هذا أخطر نوع";
-profile = "عاطفي";
+score = 1;
+note = "اختيار عاطفي ⚠️";
 }
 else if(type === "توصية"){
-result = "⚠️ التوصية مفيدة… لكنها غير كافية";
-profile = "تابع للآخرين";
+score = 2;
+note = "اعتماد على الآخرين ⚠️";
 }
 else if(type === "سعر"){
-result = "⚠️ السعر لحاله يسبب مشاكل لاحقًا";
-profile = "باحث عن الأرخص";
+score = 2;
+note = "اختيار مالي ⚠️";
 }
 else if(type === "خبرة"){
-result = "✅ هذا بداية صح… لكن تحتاج تحقق";
-profile = "واعي جزئيًا";
+score = 4;
+note = "اختيار واعي جزئيًا ✅";
 }
 
-// حفظ البيانات
-localStorage.setItem("contractor_name", name);
-localStorage.setItem("user_type", profile);
+contractors.push({name, score, note});
 
-// عرض النتيجة
-document.getElementById("out").innerHTML =
-"🔍 تحليل اختيارك لـ <b>" + name + "</b><br><br>" +
-result +
-"<br><br>🧠 نوعك: <b>" + profile + "</b>";
+// حفظ
+localStorage.setItem("contractors", JSON.stringify(contractors));
 
+// تنظيف
+document.getElementById("name").value = "";
+
+render();
 }
+
+function render(){
+
+let list = document.getElementById("list");
+list.innerHTML = "";
+
+// ترتيب
+contractors.sort((a,b)=>b.score - a.score);
+
+contractors.forEach(c=>{
+list.innerHTML += `
+<div class="item">
+<b>${c.name}</b><br>
+<span class="score">تقييم: ${c.score}</span><br>
+${c.note}
+</div>
+`;
+});
+}
+
+render();
 
 </script>
 
