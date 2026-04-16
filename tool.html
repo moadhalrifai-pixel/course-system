@@ -1,48 +1,41 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>Decision System</title>
+<title>النظام</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
+
 <div class="navbar">
 <a href="index.html">🏠 الرئيسية</a>
 <a href="lesson1.html">🎬 الدروس</a>
 <a href="tool.html">📊 النظام</a>
-<a href="#" onclick="contact()">📞 تواصل معنا</a>
 </div>
+
 <div class="container">
 
-<h1 class="title">📊 Contractor Decision System</h1>
-
 <div class="card">
-<h3>إضافة مقاول</h3>
 
 <input id="name" placeholder="اسم المقاول">
 <input id="price" placeholder="السعر">
-<input id="clarity" placeholder="وضوح (1-5)">
-<input id="org" placeholder="تنظيم (1-5)">
-<input id="team" placeholder="فريق (1-5)">
+<input id="clarity" placeholder="وضوح">
+<input id="org" placeholder="تنظيم">
+<input id="team" placeholder="فريق">
 
-<button onclick="save()">إضافة</button>
+<button id="saveBtn" onclick="save()">إضافة</button>
+
 </div>
 
-<div class="card">
-<h3>📋 قائمة المقاولين</h3>
 <div id="list"></div>
-</div>
 
-<div class="card">
-<h3>🏆 القرار النهائي</h3>
 <button onclick="decide()">اختار الأفضل</button>
 <div id="decision"></div>
-</div>
 
 </div>
 
-<script src="./app.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
