@@ -2,59 +2,30 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Build Without Loss</title>
+<title>Contractor System</title>
 
 <style>
 body {
 font-family: Arial;
 background:#0f172a;
 color:#fff;
-margin:0;
+padding:20px;
 }
-
-.container { max-width:1000px; margin:auto; padding:20px;}
-
-.hero {
-text-align:center;
-padding:60px 20px;
-}
-
-.hero h1 {
-font-size:40px;
-color:#38bdf8;
-}
-
-.btn {
-background:#22c55e;
-padding:15px;
-display:inline-block;
-margin-top:20px;
-border-radius:8px;
-cursor:pointer;
-}
-
-.section {
-margin-top:40px;
-}
+.container { max-width:900px; margin:auto;}
 
 .card {
 background:#1e293b;
-padding:20px;
-border-radius:10px;
+padding:15px;
 margin-top:15px;
-cursor:pointer;
+border-radius:10px;
 }
 
-.card:hover {
-background:#334155;
-}
-
-.hidden { display:none; }
+h1 { color:#38bdf8; }
 
 input {
 width:100%;
 padding:10px;
-margin-top:10px;
+margin-top:8px;
 border-radius:5px;
 border:none;
 }
@@ -62,8 +33,7 @@ border:none;
 button {
 background:#38bdf8;
 border:none;
-padding:12px;
-width:100%;
+padding:10px;
 margin-top:10px;
 border-radius:5px;
 cursor:pointer;
@@ -76,99 +46,51 @@ margin-top:10px;
 border-radius:6px;
 }
 
-.tag {
-padding:4px 8px;
-border-radius:5px;
+.small-btn {
+padding:5px 10px;
+margin:5px;
 font-size:12px;
 }
 
-.risk { background:#ef4444; }
-.over { background:#f59e0b; }
-.smart { background:#22c55e; }
+.delete { background:#ef4444; }
+.edit { background:#f59e0b; }
 
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-<!-- HERO -->
-<div class="hero">
-<h1>🏗️ Build Without Loss</h1>
-<p>نظام اختيار المقاول بدون خسائر</p>
-
-<div class="btn" onclick="show('lessons')">ابدأ الآن</div>
-</div>
-
-<!-- LESSONS -->
-<div id="lessons" class="section hidden">
-
-<h2>📚 الدروس</h2>
-
-<div class="card" onclick="show('lesson1')">
-🎬 Lesson 1 — ليش تختار غلط؟
-</div>
-
-<div class="card" onclick="show('tool')">
-📊 نظام اختيار المقاول
-</div>
-
-</div>
-
-<!-- LESSON 1 -->
-<div id="lesson1" class="section hidden">
-
-<h2>🎬 ليش تختار مقاول غلط؟</h2>
+<h1>🏗️ Contractor Decision System</h1>
 
 <div class="card">
-🧠 أغلب الناس تختار بناءً على شعور… مو نظام
-</div>
-
-<div class="card">
-⚠️ Red Flags:
-<br>ارتحت بسرعة
-<br>توصية فقط
-<br>استعجال
-</div>
-
-<div class="btn" onclick="show('tool')">التالي → النظام</div>
-
-</div>
-
-<!-- TOOL -->
-<div id="tool" class="section hidden">
-
-<h2>📊 Contractor Decision System</h2>
+<h2>إضافة / تعديل مقاول</h2>
 
 <input id="name" placeholder="اسم المقاول">
 <input id="price" placeholder="السعر">
-<input type="number" id="clarity" placeholder="وضوح (1-5)">
-<input type="number" id="org" placeholder="تنظيم (1-5)">
-<input type="number" id="team" placeholder="فريق (1-5)">
+<input id="clarity" placeholder="وضوح (1-5)">
+<input id="org" placeholder="تنظيم (1-5)">
+<input id="team" placeholder="فريق (1-5)">
 
-<button onclick="add()">إضافة</button>
+<button onclick="save()">حفظ</button>
 
+</div>
+
+<div class="card">
+<h2>📊 المقاولين</h2>
 <div id="list"></div>
-
-<button onclick="decide()">🏆 اختار الأفضل</button>
-
-<div id="decision"></div>
-
 </div>
 
 </div>
 
 <script>
 
-function show(id){
-document.querySelectorAll('.section').forEach(s=>s.classList.add('hidden'));
-document.getElementById(id).classList.remove('hidden');
-}
+let contractors = JSON.parse(localStorage.getItem("contractors")) || [];
+let editIndex = -1;
 
-let contractors = [];
-
-function add(){
+function save(){
 
 let name = document.getElementById("name").value;
 let price = +document.getElementById("price").value;
@@ -176,11 +98,23 @@ let clarity = +document.getElementById("clarity").value;
 let org = +document.getElementById("org").value;
 let team = +document.getElementById("team").value;
 
+if(!name) return alert("اكتب الاسم");
+
 let score = clarity + org + team;
-let value = score / price;
 
-contractors.push({name, price, score, value});
+// تعديل
+if(editIndex > -1){
+contractors[editIndex] = {name, price, clarity, org, team, score};
+editIndex = -1;
+}
+else{
+// إضافة
+contractors.push({name, price, clarity, org, team, score});
+}
 
+localStorage.setItem("contractors", JSON.stringify(contractors));
+
+clearForm();
 render();
 }
 
@@ -189,47 +123,53 @@ function render(){
 let list = document.getElementById("list");
 list.innerHTML = "";
 
-contractors.sort((a,b)=>b.value - a.value);
-
-contractors.forEach(c=>{
-
-let tag = "";
-let cls = "";
-
-if(c.score < 7){
-tag="Risk";
-cls="risk";
-}
-else if(c.value < contractors[0].value * 0.6){
-tag="Overpriced";
-cls="over";
-}
-else{
-tag="Smart";
-cls="smart";
-}
+contractors.forEach((c, index)=>{
 
 list.innerHTML += `
 <div class="item">
 <b>${c.name}</b><br>
+السعر: ${c.price}<br>
 Score: ${c.score}<br>
-<span class="tag ${cls}">${tag}</span>
+
+<button class="small-btn edit" onclick="edit(${index})">تعديل</button>
+<button class="small-btn delete" onclick="remove(${index})">حذف</button>
 </div>
 `;
 });
 }
 
-function decide(){
+function edit(i){
 
-if(contractors.length === 0) return;
+let c = contractors[i];
 
-contractors.sort((a,b)=>b.value - a.value);
+document.getElementById("name").value = c.name;
+document.getElementById("price").value = c.price;
+document.getElementById("clarity").value = c.clarity;
+document.getElementById("org").value = c.org;
+document.getElementById("team").value = c.team;
 
-let best = contractors[0];
-
-document.getElementById("decision").innerHTML =
-`🏆 الأفضل: ${best.name}`;
+editIndex = i;
 }
+
+function remove(i){
+
+if(confirm("متأكد؟")){
+contractors.splice(i,1);
+localStorage.setItem("contractors", JSON.stringify(contractors));
+render();
+}
+
+}
+
+function clearForm(){
+document.getElementById("name").value = "";
+document.getElementById("price").value = "";
+document.getElementById("clarity").value = "";
+document.getElementById("org").value = "";
+document.getElementById("team").value = "";
+}
+
+render();
 
 </script>
 
