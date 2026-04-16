@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>Lesson 1</title>
+
+<style>
+body {
+font-family: Arial;
+background:#111;
+color:#fff;
+padding:20px;
+}
+.container { max-width:600px; margin:auto;}
+.card {
+background:#222;
+padding:15px;
+margin-top:15px;
+}
+button {
+background:#0f0;
+padding:10px;
+border:none;
+width:100%;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎬 ليش تختار مقاول غلط؟</h1>
+
+<div class="card">
+🧠 أغلب الناس تختار بناءً على شعور… مو نظام
+</div>
+
+<div class="card">
+⚠️ Red Flags:
+- ارتحت له بسرعة
+- توصية فقط
+- استعجال
+</div>
+
+<div class="card">
+<input id="name" placeholder="اكتب اسم مقاول">
+<button onclick="test()">اختبر نفسك</button>
+<p id="out"></p>
+</div>
+
+</div>
+
+<script>
+function test(){
+let n = document.getElementById("name").value;
+document.getElementById("out").innerHTML =
+"⚠️ احتمال اخترته لأنه مريح فقط: " + n;
+}
+</script>
+
+</body>
+</html>
