@@ -2,105 +2,33 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Contractor Tracker</title>
-
-<style>
-body {
-font-family: Arial;
-background:#111;
-color:#fff;
-padding:20px;
-}
-.container { max-width:700px; margin:auto;}
-input {
-width:100%;
-padding:10px;
-margin:5px 0;
-}
-button {
-background:#0f0;
-border:none;
-padding:10px;
-width:100%;
-font-weight:bold;
-margin-top:10px;
-cursor:pointer;
-}
-.card {
-background:#222;
-padding:15px;
-margin-top:10px;
-border-radius:8px;
-}
-.score { color:#0f0; font-weight:bold;}
-</style>
-
+<title>Tool</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <div class="container">
 
-<h1>🏗️ تقييم المقاولين</h1>
+<h1>📊 Contractor Decision System</h1>
 
 <input id="name" placeholder="اسم المقاول">
 <input id="price" placeholder="السعر">
+<input id="clarity" placeholder="وضوح">
+<input id="org" placeholder="تنظيم">
+<input id="team" placeholder="فريق">
 
-<label>الوضوح</label>
-<input type="number" id="clarity">
-
-<label>التنظيم</label>
-<input type="number" id="org">
-
-<label>الفريق</label>
-<input type="number" id="team">
-
-<button onclick="add()">إضافة</button>
+<button onclick="save()">حفظ</button>
 
 <div id="list"></div>
 
+<button onclick="decide()">🏆 اختار الأفضل</button>
+
+<div id="decision"></div>
+
 </div>
 
-<script>
-
-let contractors = JSON.parse(localStorage.getItem("contractors")) || [];
-
-function add(){
-let name = document.getElementById("name").value;
-let price = document.getElementById("price").value;
-let clarity = +document.getElementById("clarity").value;
-let org = +document.getElementById("org").value;
-let team = +document.getElementById("team").value;
-
-let score = clarity + org + team;
-
-contractors.push({name, price, score});
-
-localStorage.setItem("contractors", JSON.stringify(contractors));
-
-render();
-}
-
-function render(){
-let list = document.getElementById("list");
-list.innerHTML = "";
-
-contractors.sort((a,b)=>b.score - a.score);
-
-contractors.forEach(c=>{
-list.innerHTML += `
-<div class="card">
-<h3>${c.name}</h3>
-<p>السعر: ${c.price}</p>
-<p class="score">التقييم: ${c.score}</p>
-</div>
-`;
-});
-}
-
-render();
-
-</script>
+<script src="app.js"></script>
 
 </body>
 </html>
