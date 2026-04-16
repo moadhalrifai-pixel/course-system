@@ -124,13 +124,6 @@ document.getElementById("name").focus();
 document.querySelector(".card button").innerText = "💾 تحديث المقاول";
 }
 
-// 🔥 تحسين UX
-window.scrollTo({top:0, behavior:"smooth"});
-document.getElementById("name").focus();
-
-document.querySelector("button").innerText = "💾 تحديث المقاول";
-}
-
 function removeItem(i){
 
 if(confirm("متأكد من الحذف؟")){
@@ -138,8 +131,7 @@ contractors.splice(i,1);
 localStorage.setItem("contractors", JSON.stringify(contractors));
 render();
 }
-}
-
+  }
 function clearForm(){
 document.getElementById("name").value = "";
 document.getElementById("price").value = "";
@@ -217,7 +209,6 @@ msg += `💰 أقل من السوق (ميزة قوية)`;
 }
 
 document.getElementById("decision").innerHTML = msg;
-}
 }
 
 render();
