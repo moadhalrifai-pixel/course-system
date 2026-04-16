@@ -2,30 +2,59 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Contractor Decision System</title>
+<title>Build Without Loss</title>
 
 <style>
 body {
 font-family: Arial;
 background:#0f172a;
 color:#fff;
-padding:20px;
+margin:0;
 }
-.container { max-width:900px; margin:auto;}
+
+.container { max-width:1000px; margin:auto; padding:20px;}
+
+.hero {
+text-align:center;
+padding:60px 20px;
+}
+
+.hero h1 {
+font-size:40px;
+color:#38bdf8;
+}
+
+.btn {
+background:#22c55e;
+padding:15px;
+display:inline-block;
+margin-top:20px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.section {
+margin-top:40px;
+}
 
 .card {
 background:#1e293b;
-padding:15px;
-margin-top:15px;
+padding:20px;
 border-radius:10px;
+margin-top:15px;
+cursor:pointer;
 }
 
-h1 { color:#38bdf8; }
+.card:hover {
+background:#334155;
+}
+
+.hidden { display:none; }
 
 input {
 width:100%;
 padding:10px;
-margin-top:8px;
+margin-top:10px;
 border-radius:5px;
 border:none;
 }
@@ -36,9 +65,8 @@ border:none;
 padding:12px;
 width:100%;
 margin-top:10px;
-font-weight:bold;
-cursor:pointer;
 border-radius:5px;
+cursor:pointer;
 }
 
 .item {
@@ -48,15 +76,10 @@ margin-top:10px;
 border-radius:6px;
 }
 
-.best { border:2px solid #22c55e; }
-.worst { border:2px solid #ef4444; }
-
 .tag {
-padding:3px 8px;
+padding:4px 8px;
 border-radius:5px;
 font-size:12px;
-display:inline-block;
-margin-top:5px;
 }
 
 .risk { background:#ef4444; }
@@ -64,69 +87,99 @@ margin-top:5px;
 .smart { background:#22c55e; }
 
 </style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-<h1>🏗️ Contractor Decision System</h1>
+<!-- HERO -->
+<div class="hero">
+<h1>🏗️ Build Without Loss</h1>
+<p>نظام اختيار المقاول بدون خسائر</p>
+
+<div class="btn" onclick="show('lessons')">ابدأ الآن</div>
+</div>
+
+<!-- LESSONS -->
+<div id="lessons" class="section hidden">
+
+<h2>📚 الدروس</h2>
+
+<div class="card" onclick="show('lesson1')">
+🎬 Lesson 1 — ليش تختار غلط؟
+</div>
+
+<div class="card" onclick="show('tool')">
+📊 نظام اختيار المقاول
+</div>
+
+</div>
+
+<!-- LESSON 1 -->
+<div id="lesson1" class="section hidden">
+
+<h2>🎬 ليش تختار مقاول غلط؟</h2>
 
 <div class="card">
-<h2>إضافة مقاول</h2>
+🧠 أغلب الناس تختار بناءً على شعور… مو نظام
+</div>
+
+<div class="card">
+⚠️ Red Flags:
+<br>ارتحت بسرعة
+<br>توصية فقط
+<br>استعجال
+</div>
+
+<div class="btn" onclick="show('tool')">التالي → النظام</div>
+
+</div>
+
+<!-- TOOL -->
+<div id="tool" class="section hidden">
+
+<h2>📊 Contractor Decision System</h2>
 
 <input id="name" placeholder="اسم المقاول">
 <input id="price" placeholder="السعر">
-
-<label>وضوح (1-5)</label>
-<input type="number" id="clarity">
-
-<label>تنظيم (1-5)</label>
-<input type="number" id="org">
-
-<label>فريق (1-5)</label>
-<input type="number" id="team">
+<input type="number" id="clarity" placeholder="وضوح (1-5)">
+<input type="number" id="org" placeholder="تنظيم (1-5)">
+<input type="number" id="team" placeholder="فريق (1-5)">
 
 <button onclick="add()">إضافة</button>
 
-</div>
-
-<div class="card">
-<h2>📊 التقييم</h2>
 <div id="list"></div>
-</div>
 
-<div class="card">
-<h2>🏆 القرار النهائي</h2>
-<button onclick="decide()">اختار الأفضل</button>
+<button onclick="decide()">🏆 اختار الأفضل</button>
+
 <div id="decision"></div>
+
 </div>
 
 </div>
 
 <script>
 
-let contractors = JSON.parse(localStorage.getItem("contractors")) || [];
+function show(id){
+document.querySelectorAll('.section').forEach(s=>s.classList.add('hidden'));
+document.getElementById(id).classList.remove('hidden');
+}
+
+let contractors = [];
 
 function add(){
 
 let name = document.getElementById("name").value;
-let price = document.getElementById("price").value;
+let price = +document.getElementById("price").value;
 let clarity = +document.getElementById("clarity").value;
 let org = +document.getElementById("org").value;
 let team = +document.getElementById("team").value;
 
-if(!name || !price || !clarity || !org || !team){
-alert("كمل البيانات");
-return;
-}
-
 let score = clarity + org + team;
+let value = score / price;
 
-contractors.push({name, price, score, clarity, org, team});
-
-localStorage.setItem("contractors", JSON.stringify(contractors));
+contractors.push({name, price, score, value});
 
 render();
 }
@@ -136,50 +189,31 @@ function render(){
 let list = document.getElementById("list");
 list.innerHTML = "";
 
-if(contractors.length === 0) return;
-
-// تحويل السعر رقم
-contractors.forEach(c=>{
-c.priceNum = parseFloat(c.price) || 0;
-});
-
-// حساب القيمة
-contractors.forEach(c=>{
-c.value = c.score / c.priceNum;
-});
-
-// ترتيب
 contractors.sort((a,b)=>b.value - a.value);
-
-let bestValue = contractors[0].value;
-let worstScore = Math.min(...contractors.map(c=>c.score));
 
 contractors.forEach(c=>{
 
 let tag = "";
-let tagClass = "";
+let cls = "";
 
-// التصنيف
-if(c.score <= 6){
-tag = "Risk";
-tagClass = "risk";
+if(c.score < 7){
+tag="Risk";
+cls="risk";
 }
-else if(c.value < bestValue * 0.6){
-tag = "Overpriced";
-tagClass = "over";
+else if(c.value < contractors[0].value * 0.6){
+tag="Overpriced";
+cls="over";
 }
 else{
-tag = "Smart Choice";
-tagClass = "smart";
+tag="Smart";
+cls="smart";
 }
 
 list.innerHTML += `
 <div class="item">
 <b>${c.name}</b><br>
-السعر: ${c.price}<br>
 Score: ${c.score}<br>
-وضوح: ${c.clarity} | تنظيم: ${c.org} | فريق: ${c.team}<br>
-<span class="tag ${tagClass}">${tag}</span>
+<span class="tag ${cls}">${tag}</span>
 </div>
 `;
 });
@@ -187,44 +221,15 @@ Score: ${c.score}<br>
 
 function decide(){
 
-if(contractors.length === 0){
-document.getElementById("decision").innerHTML = "❌ ما عندك بيانات";
-return;
-}
+if(contractors.length === 0) return;
 
-// ترتيب حسب القيمة
 contractors.sort((a,b)=>b.value - a.value);
 
 let best = contractors[0];
 
-let msg = `
-🏆 <b>${best.name}</b><br>
-Score: ${best.score}<br>
-السعر: ${best.price}<br><br>
-`;
-
-// تحليل القرار
-if(best.score >= 12){
-msg += "🔥 أفضل توازن بين الجودة والسعر";
+document.getElementById("decision").innerHTML =
+`🏆 الأفضل: ${best.name}`;
 }
-else if(best.score >= 9){
-msg += "✅ خيار جيد لكن يحتاج تدقيق";
-}
-else{
-msg += "⚠️ الخيار الأفضل نسبيًا لكن فيه مخاطرة";
-}
-
-// تحليل السوق
-let cheapest = contractors.reduce((a,b)=>a.priceNum < b.priceNum ? a : b);
-let highest = contractors.reduce((a,b)=>a.priceNum > b.priceNum ? a : b);
-
-msg += `<br><br>💡 الأرخص: ${cheapest.name}`;
-msg += `<br>💡 الأغلى: ${highest.name}`;
-
-document.getElementById("decision").innerHTML = msg;
-}
-
-render();
 
 </script>
 
