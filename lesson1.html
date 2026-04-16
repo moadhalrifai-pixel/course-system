@@ -1,265 +1,92 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>الدرس 1 - افهم اللعبة</title>
+<title>الدرس 1</title>
 <link rel="stylesheet" href="style.css">
+
+<style>
+.slide {
+display:none;
+}
+.active {
+display:block;
+}
+.nav-btn {
+margin-top:20px;
+}
+</style>
+
 </head>
 
 <body>
 
-<!-- Navbar -->
 <div class="navbar">
 <a href="index.html">🏠 الرئيسية</a>
 <a href="lesson1.html">🎬 الدروس</a>
 <a href="tool.html">📊 النظام</a>
-<a href="#" onclick="contact()">📞 تواصل معنا</a>
 </div>
 
 <div class="container">
 
-<h1 class="title">🎬 الدرس 1: قبل لا تختار المقاول… افهم اللعبة</h1>
-
-<!-- Hook -->
-<div class="card">
-<h2>💣 الحقيقة اللي محد يقولها</h2>
-<p>
-أغلب الناس يعتقدون إن المشكلة تبدأ بعد توقيع العقد…<br>
-لكن الحقيقة القاسية؟<br><br>
-
-<strong>المشكلة تبدأ قبل حتى تختار المقاول.</strong>
-</p>
+<!-- Slide 1 -->
+<div class="card slide active">
+<h2>💣 الحقيقة</h2>
+<p>أغلب الناس يعتقدون المشكلة تبدأ بعد العقد…</p>
+<button onclick="next()">التالي →</button>
 </div>
 
-<!-- Reality -->
-<div class="card">
-<h2>🎯 الواقع الحقيقي للمشاريع</h2>
-<p>
-أنت تتخيل المشروع كذا:
-</p>
-
-<p>
-مخططات → عرض سعر → عقد → تنفيذ → تسليم
-</p>
-
-<p>
-لكن الواقع غالبًا يكون:
-</p>
-
-<p>
-رؤية غير واضحة → عروض غير متكافئة → قرار سريع → عقد ضعيف → مشاكل → تأخير → خسارة
-</p>
+<!-- Slide 2 -->
+<div class="card slide">
+<h2>⚠️ الصدمة</h2>
+<p>الحقيقة؟ المشكلة تبدأ قبل اختيار المقاول</p>
+<button onclick="next()">التالي →</button>
 </div>
 
-<!-- Core Idea -->
-<div class="card">
-<h2>⚠️ أول قاعدة لازم تفهمها</h2>
-<p>
-المشروع ما ينهار فجأة…<br>
-هو يضعف من أول قرار غلط.
-</p>
-
-<p>
-واختيار المقاول مو خطوة عادية…<br>
-هذا القرار يحدد:
-</p>
-
-<ul>
-<li>جودة البناء</li>
-<li>مدة التنفيذ</li>
-<li>تكلفة المشروع النهائية</li>
-</ul>
+<!-- Slide 3 -->
+<div class="card slide">
+<h2>🎯 الواقع</h2>
+<p>أنت تتخيل المشروع مرتب… لكن الواقع مختلف تمامًا</p>
+<button onclick="next()">التالي →</button>
 </div>
 
-<!-- Myth 1 -->
-<div class="card">
-<h2>🚫 الوهم 1: “أحتاج مقاول زين بس”</h2>
-
-<p>
-مو صحيح…
-</p>
-
-<p>
-حتى لو المقاول:
-</p>
-
-<ul>
-<li>طيب</li>
-<li>معروف</li>
-<li>نيته زينة</li>
-</ul>
-
-<p>
-ممكن يخرب مشروعك إذا النظام ضعيف.
-</p>
-
-<p>
-ليش؟
-</p>
-
-<ul>
-<li>نطاق غير واضح</li>
-<li>مخططات ناقصة</li>
-<li>دفعات غير مضبوطة</li>
-<li>عقد ضعيف</li>
-</ul>
-
-<p>
-<strong>المشكلة مو في المقاول… المشكلة في النظام.</strong>
-</p>
+<!-- Slide 4 -->
+<div class="card slide">
+<h2>🧠 القاعدة</h2>
+<p>المشروع ما ينهار فجأة… ينهار من أول قرار</p>
+<button onclick="next()">التالي →</button>
 </div>
 
-<!-- Myth 2 -->
-<div class="card">
-<h2>💸 الوهم 2: “كم سعره؟”</h2>
-
-<p>
-هذا السؤال ناقص…
-</p>
-
-<p>
-السؤال الصح:
-</p>
-
-<p>
-<strong>
-بكم مقابل ماذا؟ بأي جودة؟ خلال كم؟ وبأي شروط؟
-</strong>
-</p>
-
-<p>
-لأن كل مقاول بيسعر بطريقته:
-</p>
-
-<ul>
-<li>واحد يخفض السعر ويخفي التفاصيل</li>
-<li>واحد يرفع السعر لأنه متخوف</li>
-<li>واحد يترك بنود مفتوحة ويرجع لك فيها لاحقًا</li>
-</ul>
-
-<p>
-وأنت تحسب إنك تقارن… لكن فعليًا أنت تقارن أشياء مختلفة تمامًا :contentReference[oaicite:0]{index=0}
-</p>
+<!-- Slide 5 -->
+<div class="card slide">
+<h2>🚀 التحول</h2>
+<p>لا تبحث عن مقاول جيد فقط… ابنِ نظام يحميك</p>
+<button onclick="next()">التالي →</button>
 </div>
 
-<!-- Myth 3 -->
-<div class="card">
-<h2>📄 الوهم 3: “وقعت عقد = أنا بأمان”</h2>
-
-<p>
-مو أي عقد يحميك.
-</p>
-
-<p>
-العقد الضعيف ممكن يكون أخطر من عدم وجود عقد.
-</p>
-
-<ul>
-<li>ما يحدد النطاق</li>
-<li>ما ينظم الدفعات</li>
-<li>ما يوضح التغييرات</li>
-<li>ما يحسم النزاعات</li>
-</ul>
-
-<p>
-<strong>العقد الحقيقي هو اللي يجاوب: ماذا؟ متى؟ كيف؟ ومن المسؤول؟</strong>
-</p>
-</div>
-
-<!-- Deep Insight -->
-<div class="card">
-<h2>🧠 فهم السوق الحقيقي</h2>
-
-<p>
-المشروع مو مكان نوايا… هو ساحة مصالح.
-</p>
-
-<ul>
-<li>المقاول يبي ربح وسيولة</li>
-<li>المورد يبي يبيع</li>
-<li>أنت تبي جودة وسعر مناسب</li>
-</ul>
-
-<p>
-إذا ما فيه نظام… كل واحد بيلعب لصالحه.
-</p>
-</div>
-
-<!-- Hidden Loss -->
-<div class="card">
-<h2>⚠️ الخسائر اللي ما تنتبه لها</h2>
-
-<ul>
-<li>غموض = فلوس زيادة لاحقًا</li>
-<li>عقد فضفاض = نزاع</li>
-<li>استعجال = تأخير</li>
-<li>دفع مبكر = فقدان السيطرة</li>
-</ul>
-
-<p>
-أخطر الخسائر مو الواضحة… بل اللي تتراكم بهدوء :contentReference[oaicite:1]{index=1}
-</p>
-</div>
-
-<!-- Mindset Shift -->
-<div class="card">
-<h2>🔄 التحول العقلي المطلوب</h2>
-
-<p>مو:</p>
-<p>“أبي مقاول يشتغل”</p>
-
-<p>بل:</p>
-<p><strong>“أبي نظام ينفذ المشروع وأنا مسيطر عليه”</strong></p>
-
-<p>مو:</p>
-<p>“نبدأ وبعدين نشوف”</p>
-
-<p>بل:</p>
-<p><strong>“نبدأ صح من البداية”</strong></p>
-</div>
-
-<!-- Conclusion -->
-<div class="card">
-<h2>🏁 خلاصة الدرس</h2>
-
-<p>
-إذا دخلت المشروع وأنت تعتمد على:
-</p>
-
-<ul>
-<li>السعر</li>
-<li>الانطباع</li>
-<li>الكلام</li>
-</ul>
-
-<p>
-أنت فعليًا بدأت المشكلة بنفسك.
-</p>
-
-<p>
-أما إذا فهمت:
-</p>
-
-<ul>
-<li>كل غموض = خطر</li>
-<li>كل دفعة = قوة</li>
-<li>كل قرار = له تكلفة</li>
-</ul>
-
-<p>
-<strong>فأنت بدأت تحمي مشروعك قبل لا يبدأ.</strong>
-</p>
-</div>
-
-<!-- CTA -->
-<div class="card center">
-<h2>➡️ جاهز تفهم اللعبة أكثر؟</h2>
-<a href="lesson2.html" class="btn green">🎬 الدرس 2</a>
+<!-- Slide 6 -->
+<div class="card slide">
+<h2>🏁 النهاية</h2>
+<p>إذا فهمت هذا… أنت متقدم 80% عن باقي الملاك</p>
+<a href="lesson2.html" class="btn">🎬 الدرس 2</a>
 </div>
 
 </div>
 
-<script src="app.js"></script>
+<script>
+
+let current = 0;
+let slides = document.querySelectorAll(".slide");
+
+function next(){
+slides[current].classList.remove("active");
+current++;
+if(current < slides.length){
+slides[current].classList.add("active");
+}
+}
+
+</script>
 
 </body>
 </html>
