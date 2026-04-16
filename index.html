@@ -9,28 +9,162 @@ body {
 font-family: Arial;
 background:#111;
 color:#fff;
-text-align:center;
-padding:40px;
+padding:20px;
+line-height:1.8;
 }
-a {
-display:block;
-margin:15px;
-padding:15px;
+.container { max-width:900px; margin:auto;}
+.card {
 background:#222;
-color:#0f0;
-text-decoration:none;
+padding:15px;
+margin-top:15px;
 border-radius:8px;
 }
+h1 { color:#0f0; }
+
+input {
+width:100%;
+padding:10px;
+margin-top:10px;
+}
+
+button {
+background:#0f0;
+border:none;
+padding:12px;
+width:100%;
+margin-top:10px;
+font-weight:bold;
+cursor:pointer;
+border-radius:5px;
+}
+
+.item {
+background:#333;
+padding:10px;
+margin-top:10px;
+border-radius:6px;
+}
+
+.score { color:#0f0; }
+.red { color:#ff4d4d; }
 </style>
 
 </head>
 
 <body>
 
-<h1>🏗️ Build Without Loss</h1>
-<p>نظام بناء البيت بدون خسائر</p>
+<div class="container">
 
-<a href="lesson1.html">🎬 Lesson 1</a>
-<a href="tracker.html">📊 تقييم المقاولين</a>
+<h1>🏗️ Build Without Loss</h1>
+
+<!-- LESSON 1 -->
+<div class="card">
+<h2>🎬 Lesson 1 — ليش تختار مقاول غلط؟</h2>
+<p>أغلب الناس تختار بناءً على شعور… مو نظام</p>
+
+<input id="name" placeholder="اسم المقاول">
+
+<button onclick="add('راحة')">ارتحت له</button>
+<button onclick="add('توصية')">توصية</button>
+<button onclick="add('سعر')">سعر</button>
+<button onclick="add('خبرة')">خبرة</button>
+
+</div>
+
+<!-- LIST -->
+<div class="card">
+<h2>📊 المقاولين</h2>
+<div id="list"></div>
+</div>
+
+<!-- LESSON 2 -->
+<div class="card">
+<h2>🧠 أخطاء شائعة</h2>
+
+<p class="red">❌ السعر فقط</p>
+<p class="red">❌ التوصية فقط</p>
+<p class="red">❌ الانطباع</p>
+
+<p>السعر الأقل قد يكون الأعلى فعليًا :contentReference[oaicite:1]{index=1}</p>
+
+</div>
+
+<!-- FRAMEWORK -->
+<div class="card">
+<h2>📐 نظام القرار</h2>
+
+<p>1. فرز</p>
+<p>2. تحقق</p>
+<p>3. مقابلة</p>
+<p>4. قرار</p>
+
+</div>
+
+</div>
+
+<script>
+
+let contractors = JSON.parse(localStorage.getItem("contractors")) || [];
+
+function add(type){
+
+let name = document.getElementById("name").value;
+
+if(!name){
+alert("اكتب اسم المقاول");
+return;
+}
+
+let score = 0;
+let note = "";
+
+if(type === "راحة"){
+score = 1;
+note = "اختيار عاطفي ⚠️";
+}
+else if(type === "توصية"){
+score = 2;
+note = "اعتماد على الآخرين";
+}
+else if(type === "سعر"){
+score = 2;
+note = "اختيار مالي";
+}
+else if(type === "خبرة"){
+score = 4;
+note = "اختيار واعي";
+}
+
+contractors.push({name, score, note});
+
+localStorage.setItem("contractors", JSON.stringify(contractors));
+
+document.getElementById("name").value = "";
+
+render();
+}
+
+function render(){
+
+let list = document.getElementById("list");
+list.innerHTML = "";
+
+contractors.sort((a,b)=>b.score - a.score);
+
+contractors.forEach(c=>{
+list.innerHTML += `
+<div class="item">
+<b>${c.name}</b><br>
+<span class="score">Score: ${c.score}</span><br>
+${c.note}
+</div>
+`;
+});
+}
+
+render();
+
+</script>
+
 </body>
 </html>
