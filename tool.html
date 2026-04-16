@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Tool</title>
+<title>Decision System</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -10,21 +10,30 @@
 
 <div class="container">
 
-<h1>📊 Contractor Decision System</h1>
+<h1 class="title">📊 Contractor Decision System</h1>
+
+<div class="card">
+<h3>إضافة مقاول</h3>
 
 <input id="name" placeholder="اسم المقاول">
 <input id="price" placeholder="السعر">
-<input id="clarity" placeholder="وضوح">
-<input id="org" placeholder="تنظيم">
-<input id="team" placeholder="فريق">
+<input id="clarity" placeholder="وضوح (1-5)">
+<input id="org" placeholder="تنظيم (1-5)">
+<input id="team" placeholder="فريق (1-5)">
 
-<button onclick="save()">حفظ</button>
+<button onclick="save()">إضافة</button>
+</div>
 
+<div class="card">
+<h3>📋 قائمة المقاولين</h3>
 <div id="list"></div>
+</div>
 
-<button onclick="decide()">🏆 اختار الأفضل</button>
-
+<div class="card">
+<h3>🏆 القرار النهائي</h3>
+<button onclick="decide()">اختار الأفضل</button>
 <div id="decision"></div>
+</div>
 
 </div>
 
