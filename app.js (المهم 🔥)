@@ -8,6 +8,11 @@ let clarity = +document.getElementById("clarity").value;
 let org = +document.getElementById("org").value;
 let team = +document.getElementById("team").value;
 
+if(!name || !price || !clarity || !org || !team){
+alert("كمل البيانات");
+return;
+}
+
 let score = clarity + org + team;
 
 contractors.push({name, price, score});
@@ -22,11 +27,42 @@ function render(){
 let list = document.getElementById("list");
 list.innerHTML = "";
 
+if(contractors.length === 0) return;
+
+// حساب القيمة
 contractors.forEach(c=>{
+c.priceNum = parseFloat(c.price);
+c.value = c.score / c.priceNum;
+});
+
+// ترتيب
+contractors.sort((a,b)=>b.value - a.value);
+
+let bestValue = contractors[0].value;
+
+contractors.forEach(c=>{
+
+let tag="", cls="";
+
+if(c.score < 8){
+tag="Risk";
+cls="risk";
+}
+else if(c.value < bestValue * 0.7){
+tag="Overpriced";
+cls="over";
+}
+else{
+tag="Smart Choice";
+cls="smart";
+}
+
 list.innerHTML += `
 <div class="item">
 <b>${c.name}</b><br>
-Score: ${c.score}
+Score: ${c.score}<br>
+السعر: ${c.price}<br>
+<span class="tag ${cls}">${tag}</span>
 </div>
 `;
 });
@@ -36,12 +72,26 @@ function decide(){
 
 if(contractors.length === 0) return;
 
-contractors.sort((a,b)=>b.score - a.score);
+contractors.sort((a,b)=>b.value - a.value);
 
 let best = contractors[0];
 
-document.getElementById("decision").innerHTML =
-`🏆 الأفضل: ${best.name}`;
+let avgPrice = contractors.reduce((s,c)=>s+c.priceNum,0)/contractors.length;
+
+let msg = `
+🏆 الأفضل: ${best.name}<br>
+Score: ${best.score}<br>
+السعر: ${best.price}<br><br>
+`;
+
+if(best.price > avgPrice * 1.3){
+msg += "⚠️ سعره أعلى من السوق";
+}
+else{
+msg += "🔥 أفضل توازن بالسوق";
+}
+
+document.getElementById("decision").innerHTML = msg;
 }
 
 render();
