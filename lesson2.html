@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <title>الدرس 2</title>
@@ -7,71 +7,33 @@
 </head>
 
 <body>
+
 <div class="navbar">
 <a href="index.html">🏠 الرئيسية</a>
 <a href="lesson1.html">🎬 الدروس</a>
 <a href="tool.html">📊 النظام</a>
-<a href="#" onclick="contact()">📞 تواصل معنا</a>
 </div>
+
 <div class="container">
 
-<h1 class="title">🧠 الدرس 2 — كيف تخسر بدون ما تدري؟</h1>
+<h2>🧠 كيف تخسر بدون ما تدري؟</h2>
 
-<div class="card">
-❗ المشكلة مو في المقاول… المشكلة في طريقة تفكيرك
-</div>
+<button onclick="choose('price')">💰 السعر</button>
+<button onclick="choose('feeling')">😌 الشعور</button>
 
-<div class="card">
-جاوب بصراحة 👇
-</div>
+<div id="result"></div>
 
-<div class="card">
-
-<p>ليش اخترت آخر مقاول تعاملت معه؟</p>
-
-<button onclick="choose('price')">💰 لأنه أرخص</button>
-<button onclick="choose('referral')">👥 توصية من شخص</button>
-<button onclick="choose('feeling')">😌 ارتحت له</button>
-<button onclick="choose('analysis')">📊 تحليل ومقارنة</button>
-
-</div>
-
-<div class="card" id="result"></div>
-
-<div class="card">
-⚠️ إذا دخلت النظام بنفس طريقة التفكير… راح تختار نفس الغلط
-<br><br>
-👇 الآن بعد ما فهمت:
-اختار بعقل مو شعور
-</div>
-
-<a href="tool.html" class="btn">🚀 الآن ادخل للنظام</a>
+<a href="tool.html" class="btn">اذهب للنظام</a>
 
 </div>
 
 <script>
-
 function choose(type){
-
-let msg = "";
-
-if(type === "price"){
-msg = "❌ اختيارك مالي بحت — غالبًا راح تدفع أكثر لاحقًا بسبب أخطاء التنفيذ";
-}
-else if(type === "referral"){
-msg = "⚠️ التوصية مفيدة… لكنها لا تعني أن هذا المقاول مناسب لك";
-}
-else if(type === "feeling"){
-msg = "❌ هذا أخطر نوع — اختيار عاطفي بدون بيانات أو تحليل";
-}
-else if(type === "analysis"){
-msg = "🔥 هذا تفكير احترافي — لكن لازم يكون عندك نظام واضح للمقارنة";
-}
-
+let msg = type==="price"
+? "❌ راح تدفع أكثر لاحقًا"
+: "❌ اختيار عاطفي";
 document.getElementById("result").innerHTML = msg;
-
 }
-
 </script>
 
 </body>
