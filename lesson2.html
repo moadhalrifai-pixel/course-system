@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>الدرس 2</title>
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<h1 class="title">🧠 الدرس 2 — كيف تخسر بدون ما تدري؟</h1>
+
+<div class="card">
+❗ المشكلة مو في المقاول… المشكلة في طريقة تفكيرك
+</div>
+
+<div class="card">
+جاوب بصراحة 👇
+</div>
+
+<div class="card">
+
+<p>ليش اخترت آخر مقاول تعاملت معه؟</p>
+
+<button onclick="choose('price')">💰 لأنه أرخص</button>
+<button onclick="choose('referral')">👥 توصية من شخص</button>
+<button onclick="choose('feeling')">😌 ارتحت له</button>
+<button onclick="choose('analysis')">📊 تحليل ومقارنة</button>
+
+</div>
+
+<div class="card" id="result"></div>
+
+<div class="card">
+⚠️ إذا دخلت النظام بنفس طريقة التفكير… راح تختار نفس الغلط
+<br><br>
+👇 الآن بعد ما فهمت:
+اختار بعقل مو شعور
+</div>
+
+<a href="tool.html" class="btn">🚀 الآن ادخل للنظام</a>
+
+</div>
+
+<script>
+
+function choose(type){
+
+let msg = "";
+
+if(type === "price"){
+msg = "❌ اختيارك مالي بحت — غالبًا راح تدفع أكثر لاحقًا بسبب أخطاء التنفيذ";
+}
+else if(type === "referral"){
+msg = "⚠️ التوصية مفيدة… لكنها لا تعني أن هذا المقاول مناسب لك";
+}
+else if(type === "feeling"){
+msg = "❌ هذا أخطر نوع — اختيار عاطفي بدون بيانات أو تحليل";
+}
+else if(type === "analysis"){
+msg = "🔥 هذا تفكير احترافي — لكن لازم يكون عندك نظام واضح للمقارنة";
+}
+
+document.getElementById("result").innerHTML = msg;
+
+}
+
+</script>
+
+</body>
+</html>
