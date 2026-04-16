@@ -53,11 +53,36 @@ width:100%;
 </div>
 
 <script>
+
 function test(){
-let n = document.getElementById("name").value;
-document.getElementById("out").innerHTML =
-"⚠️ احتمال اخترته لأنه مريح فقط: " + n;
+
+let name = document.getElementById("name").value;
+
+let answer = prompt("ليش اخترت هذا المقاول؟ (سعر / توصية / ارتحت له / خبرة)");
+
+let result = "";
+
+if(answer.includes("ارتحت") || answer.includes("راحة")){
+result = "⚠️ اختيارك عاطفي — هذا أخطر نوع";
 }
+else if(answer.includes("توصية")){
+result = "⚠️ التوصية مفيدة… لكنها غير كافية";
+}
+else if(answer.includes("سعر")){
+result = "⚠️ السعر لحاله يسبب مشاكل لاحقًا";
+}
+else if(answer.includes("خبرة")){
+result = "✅ هذا بداية صح… لكن تحتاج تحقق";
+}
+else{
+result = "⚠️ اختيار غير واضح — تحتاج تعيد التقييم";
+}
+
+document.getElementById("out").innerHTML =
+"🔍 تحليل اختيارك لـ " + name + "<br><br>" + result;
+
+}
+
 </script>
 
 </body>
