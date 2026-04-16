@@ -1,4 +1,11 @@
-let contractors = JSON.parse(localStorage.getItem("contractors")) || [];
+let projects = JSON.parse(localStorage.getItem("projects")) || [];
+let currentProjectIndex = localStorage.getItem("currentProject");
+
+let contractors = [];
+
+if(currentProjectIndex !== null && projects[currentProjectIndex]){
+contractors = projects[currentProjectIndex].contractors;
+}
 let editIndex = -1;
 
 // 📞 تواصل
