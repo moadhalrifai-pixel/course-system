@@ -2,38 +2,205 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>الدرس 2</title>
+<title>الدرس 2 - لعبة السعر</title>
 <link rel="stylesheet" href="style.css">
+
+<style>
+.screen { display:none; }
+.active { display:block; }
+.choice { 
+display:block;
+margin-top:10px;
+padding:12px;
+background:#1e293b;
+border-radius:8px;
+cursor:pointer;
+}
+.choice:hover { background:#334155; }
+.box {
+background:#334155;
+padding:10px;
+margin-top:10px;
+border-radius:8px;
+}
+</style>
+
 </head>
 
 <body>
 
 <div class="navbar">
 <a href="index.html">🏠 الرئيسية</a>
-<a href="lesson1.html">🎬 الدروس</a>
+<a href="dashboard.html">📊 المشاريع</a>
 <a href="tool.html">📊 النظام</a>
 </div>
 
 <div class="container">
 
-<h2>🧠 كيف تخسر بدون ما تدري؟</h2>
+<!-- 🎬 البداية -->
+<div class="screen active">
+<h2>💰 عندك 3 عروض أسعار</h2>
 
-<button onclick="choose('price')">💰 السعر</button>
-<button onclick="choose('feeling')">😌 الشعور</button>
+<div class="box">
+A: 120,000 د.ك
+</div>
 
-<div id="result"></div>
+<div class="box">
+B: 150,000 د.ك
+</div>
 
-<a href="tool.html" class="btn">اذهب للنظام</a>
+<div class="box">
+C: 135,000 د.ك
+</div>
+
+<p>أي واحد تختار؟</p>
+
+<div class="choice" onclick="go(1)">أختار الأرخص (A)</div>
+<div class="choice" onclick="go(2)">أختار الوسط (C)</div>
+<div class="choice" onclick="go(3)">أختار الأغلى (B)</div>
+</div>
+
+<!-- ❌ الأرخص -->
+<div class="screen">
+<h2>💣 اخترت الأرخص</h2>
+
+<p>لكن العرض كان:</p>
+<ul>
+<li>بدون تفاصيل</li>
+<li>بنود مفتوحة</li>
+<li>تفسيرات لاحقة</li>
+</ul>
+
+<p>❌ السعر منخفض… لكن الخسارة تبدأ لاحقًا</p>
+
+<button onclick="next()">التالي</button>
+</div>
+
+<!-- ❌ الوسط -->
+<div class="screen">
+<h2>🤔 اخترت الوسط</h2>
+
+<p>قرار “مريح”… لكن:</p>
+
+<ul>
+<li>ما حللت فعليًا</li>
+<li>اعتمدت على شعور</li>
+</ul>
+
+<p>❌ هذا مو تحليل… هذا هروب من القرار</p>
+
+<button onclick="next()">التالي</button>
+</div>
+
+<!-- ❌ الأغلى -->
+<div class="screen">
+<h2>💸 اخترت الأغلى</h2>
+
+<p>تفكيرك:</p>
+<p>“أكيد الأفضل”</p>
+
+<p>لكن:</p>
+<ul>
+<li>يمكن فيه احتياطيات زايدة</li>
+<li>يمكن فيه مبالغة</li>
+</ul>
+
+<p>❌ السعر العالي ≠ جودة</p>
+
+<button onclick="next()">التالي</button>
+</div>
+
+<!-- 🔥 الحقيقة -->
+<div class="screen">
+<h2>💣 الحقيقة</h2>
+
+<p>
+أنت ما كنت تقارن أسعار…
+</p>
+
+<p>
+<strong>أنت كنت تقارن أشياء مختلفة</strong>
+</p>
+
+<ul>
+<li>واحد مسعر ناقص</li>
+<li>واحد مسعر بزيادة</li>
+<li>واحد مخبي بنود</li>
+</ul>
+
+<button onclick="next()">التالي</button>
+</div>
+
+<!-- 🧠 الفهم -->
+<div class="screen">
+<h2>🧠 القاعدة الذهبية</h2>
+
+<p>
+السؤال مو:
+</p>
+
+<p><strong>كم السعر؟</strong></p>
+
+<p>السؤال:</p>
+
+<p>
+<strong>
+بكم مقابل ماذا؟ بأي جودة؟ بأي مدة؟
+</strong>
+</p>
+
+<p>
+⚠️ بدون وضوح… السعر لعبة :contentReference[oaicite:1]{index=1}
+</p>
+
+<button onclick="next()">التالي</button>
+</div>
+
+<!-- 🎯 التحول -->
+<div class="screen">
+<h2>🎯 الحل</h2>
+
+<p>
+لا تبحث عن:
+</p>
+
+<p>“أفضل سعر”</p>
+
+<p>
+ابحث عن:
+</p>
+
+<p><strong>أوضح عرض</strong></p>
+
+<button onclick="next()">التالي</button>
+</div>
+
+<!-- 🚀 CTA -->
+<div class="screen">
+<h2>🚀 جاهز تقارن صح؟</h2>
+
+<a href="tool.html" class="btn blue">📊 استخدم النظام الآن</a>
+</div>
 
 </div>
 
 <script>
-function choose(type){
-let msg = type==="price"
-? "❌ راح تدفع أكثر لاحقًا"
-: "❌ اختيار عاطفي";
-document.getElementById("result").innerHTML = msg;
+
+let screens = document.querySelectorAll(".screen");
+let current = 0;
+
+function go(step){
+screens[current].classList.remove("active");
+current = step;
+screens[current].classList.add("active");
 }
+
+function next(){
+screens[current].classList.remove("active");
+current++;
+screens[current].classList.add("active");
+}
+
 </script>
 
 </body>
