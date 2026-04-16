@@ -31,7 +31,8 @@ container.innerHTML = html;
 
 // حفظ
 function save(){
-
+projects[currentProjectIndex].contractors = contractors;
+localStorage.setItem("projects", JSON.stringify(projects));
 let name = document.getElementById("name").value.trim();
 let price = parseFloat(document.getElementById("price").value);
 let clarity = +document.getElementById("clarity").value;
