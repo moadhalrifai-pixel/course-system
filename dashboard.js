@@ -2,16 +2,29 @@ let projects = JSON.parse(localStorage.getItem("projects")) || [];
 
 function addProject(){
 
-let name = document.getElementById("projectName").value.trim();
+let input = document.getElementById("projectName");
+let name = input.value.trim();
 
-if(!name) return alert("اكتب اسم المشروع");
+if(!name){
+alert("اكتب اسم المشروع");
+return;
+}
+
+// منع تكرار
+let exists = projects.find(p => p.name === name);
+if(exists){
+alert("المشروع موجود");
+return;
+}
 
 projects.push({
-name,
-contractors:[]
+name: name,
+contractors: []
 });
 
 localStorage.setItem("projects", JSON.stringify(projects));
+
+input.value = "";
 
 renderProjects();
 }
@@ -19,11 +32,14 @@ renderProjects();
 function renderProjects(){
 
 let container = document.getElementById("projects");
-container.innerHTML = "";
+
+if(!container) return;
+
+let html = "";
 
 projects.forEach((p,i)=>{
 
-container.innerHTML += `
+html += `
 <div class="card">
 <h3>${p.name}</h3>
 
@@ -32,13 +48,14 @@ container.innerHTML += `
 </div>
 `;
 });
+
+container.innerHTML = html;
 }
 
 function openProject(i){
 
 localStorage.setItem("currentProject", i);
 
-// يوديك للنظام
 window.location.href = "tool.html";
 }
 
@@ -51,4 +68,5 @@ renderProjects();
 }
 }
 
+// تشغيل
 renderProjects();
