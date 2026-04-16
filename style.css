@@ -1,48 +1,97 @@
 body {
-font-family: Arial;
-background:#0f172a;
-color:#fff;
-padding:20px;
-text-align:center;
+font-family: 'Segoe UI', sans-serif;
+background: linear-gradient(135deg, #0f172a, #020617);
+color: #fff;
+margin:0;
 }
 
-.container { max-width:700px; margin:auto;}
+.container {
+max-width: 800px;
+margin:auto;
+padding:20px;
+}
+
+.center {
+text-align:center;
+margin-top:100px;
+}
+
+.title {
+font-size:32px;
+color:#38bdf8;
+}
+
+.subtitle {
+color:#94a3b8;
+margin-bottom:30px;
+}
 
 .card {
 background:#1e293b;
-padding:15px;
+padding:20px;
 margin-top:15px;
-border-radius:10px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,0.3);
 }
 
-.btn {
-display:block;
-background:#22c55e;
-padding:12px;
-margin-top:15px;
-border-radius:8px;
-text-decoration:none;
-color:#000;
-font-weight:bold;
+.red {
+background:#3f1d1d;
 }
 
 input {
 width:100%;
-padding:10px;
+padding:12px;
 margin-top:10px;
+border:none;
+border-radius:8px;
 }
 
 button {
 background:#38bdf8;
 border:none;
 padding:12px;
-margin-top:10px;
+margin-top:15px;
 width:100%;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.btn {
+display:block;
+background:#22c55e;
+padding:14px;
+margin-top:15px;
+border-radius:10px;
+text-decoration:none;
+color:#000;
+font-weight:bold;
+text-align:center;
+}
+
+.btn.secondary {
+background:#38bdf8;
+}
+
+.btn.big {
+font-size:18px;
 }
 
 .item {
 background:#334155;
-padding:10px;
+padding:12px;
 margin-top:10px;
-border-radius:6px;
+border-radius:8px;
 }
+
+.tag {
+padding:4px 8px;
+border-radius:6px;
+font-size:12px;
+display:inline-block;
+margin-top:5px;
+}
+
+.risk { background:#ef4444; }
+.over { background:#f59e0b; }
+.smart { background:#22c55e; }
