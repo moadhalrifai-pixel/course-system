@@ -10,19 +10,36 @@ font-family: Arial;
 background:#111;
 color:#fff;
 padding:20px;
+line-height:1.8;
 }
-.container { max-width:600px; margin:auto;}
+.container {
+max-width:700px;
+margin:auto;
+}
 .card {
 background:#222;
 padding:15px;
 margin-top:15px;
+border-radius:8px;
+}
+h1 {
+color:#0f0;
 }
 button {
 background:#0f0;
-padding:10px;
 border:none;
+padding:12px;
 width:100%;
+margin-top:10px;
+font-weight:bold;
+cursor:pointer;
+border-radius:5px;
 }
+button:hover {
+opacity:0.9;
+}
+.red { color:#ff4d4d; }
+.green { color:#0f0; }
 </style>
 
 </head>
@@ -38,48 +55,72 @@ width:100%;
 </div>
 
 <div class="card">
-⚠️ Red Flags:
-- ارتحت له بسرعة
-- توصية فقط
+⚠️ <b>Red Flags:</b><br>
+- ارتحت له بسرعة<br>
+- توصية فقط<br>
 - استعجال
 </div>
 
 <div class="card">
-<input id="name" placeholder="اكتب اسم مقاول">
-<button onclick="test()">اختبر نفسك</button>
-<p id="out"></p>
+<input id="name" placeholder="اكتب اسم المقاول" style="width:100%; padding:10px;">
 </div>
+
+<div class="card">
+
+<h3>ليش اخترته؟</h3>
+
+<button onclick="analyze('راحة')">ارتحت له</button>
+<button onclick="analyze('توصية')">توصية</button>
+<button onclick="analyze('سعر')">سعر مناسب</button>
+<button onclick="analyze('خبرة')">خبرة</button>
+
+</div>
+
+<div class="card" id="out"></div>
 
 </div>
 
 <script>
 
-function test(){
+function analyze(type){
 
 let name = document.getElementById("name").value;
 
-let answer = prompt("ليش اخترت هذا المقاول؟ (سعر / توصية / ارتحت له / خبرة)");
+if(!name){
+document.getElementById("out").innerHTML = "⚠️ اكتب اسم المقاول أولاً";
+return;
+}
 
 let result = "";
+let profile = "";
 
-if(answer.includes("ارتحت") || answer.includes("راحة")){
+// التحليل
+if(type === "راحة"){
 result = "⚠️ اختيارك عاطفي — هذا أخطر نوع";
+profile = "عاطفي";
 }
-else if(answer.includes("توصية")){
+else if(type === "توصية"){
 result = "⚠️ التوصية مفيدة… لكنها غير كافية";
+profile = "تابع للآخرين";
 }
-else if(answer.includes("سعر")){
+else if(type === "سعر"){
 result = "⚠️ السعر لحاله يسبب مشاكل لاحقًا";
+profile = "باحث عن الأرخص";
 }
-else if(answer.includes("خبرة")){
+else if(type === "خبرة"){
 result = "✅ هذا بداية صح… لكن تحتاج تحقق";
-}
-else{
-result = "⚠️ اختيار غير واضح — تحتاج تعيد التقييم";
+profile = "واعي جزئيًا";
 }
 
+// حفظ البيانات
+localStorage.setItem("contractor_name", name);
+localStorage.setItem("user_type", profile);
+
+// عرض النتيجة
 document.getElementById("out").innerHTML =
-"🔍 تحليل اختيارك لـ " + name + "<br><br>" + result;
+"🔍 تحليل اختيارك لـ <b>" + name + "</b><br><br>" +
+result +
+"<br><br>🧠 نوعك: <b>" + profile + "</b>";
 
 }
 
