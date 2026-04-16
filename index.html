@@ -123,16 +123,45 @@ function render(){
 let list = document.getElementById("list");
 list.innerHTML = "";
 
-contractors.forEach((c, index)=>{
+if(contractors.length === 0) return;
+
+// حساب السعر + القيمة
+contractors.forEach(c=>{
+c.priceNum = parseFloat(c.price) || 0;
+c.value = c.score / c.priceNum;
+});
+
+// ترتيب حسب القيمة
+contractors.sort((a,b)=>b.value - a.value);
+
+let bestValue = contractors[0].value;
+
+contractors.forEach(c=>{
+
+let tag = "";
+let cls = "";
+
+// 🔥 التصنيف الحقيقي
+if(c.score < 8){
+tag="Risk";
+cls="risk";
+}
+else if(c.value < bestValue * 0.7){
+tag="Overpriced";
+cls="over";
+}
+else{
+tag="Smart Choice";
+cls="smart";
+}
 
 list.innerHTML += `
 <div class="item">
 <b>${c.name}</b><br>
-السعر: ${c.price}<br>
 Score: ${c.score}<br>
-
-<button class="small-btn edit" onclick="edit(${index})">تعديل</button>
-<button class="small-btn delete" onclick="remove(${index})">حذف</button>
+السعر: ${c.price}<br>
+Value: ${c.value.toFixed(5)}<br>
+<span class="tag ${cls}">${tag}</span>
 </div>
 `;
 });
@@ -170,7 +199,43 @@ document.getElementById("team").value = "";
 }
 
 render();
+function decide(){
 
+if(contractors.length === 0){
+document.getElementById("decision").innerHTML = "❌ ما عندك بيانات";
+return;
+}
+
+// ترتيب حسب القيمة
+contractors.sort((a,b)=>b.value - a.value);
+
+let best = contractors[0];
+
+let msg = `
+🏆 الأفضل: <b>${best.name}</b><br>
+Score: ${best.score}<br>
+السعر: ${best.price}<br>
+Value: ${best.value.toFixed(5)}<br><br>
+`;
+
+// تحليل احترافي
+if(best.value > 0.0005){
+msg += "🔥 أفضل توازن بين الجودة والسعر";
+}
+else if(best.score >= 10){
+msg += "⚠️ جودة عالية لكن سعره مبالغ فيه";
+}
+else{
+msg += "❌ لا يوجد خيار قوي — تحتاج إعادة تقييم";
+}
+
+// مقارنة السوق
+let cheapest = contractors.reduce((a,b)=>a.priceNum < b.priceNum ? a : b);
+
+msg += `<br><br>💡 الأرخص: ${cheapest.name}`;
+
+document.getElementById("decision").innerHTML = msg;
+}
 </script>
 
 </body>
