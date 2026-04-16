@@ -25,6 +25,8 @@ input {
 width:100%;
 padding:10px;
 margin-top:10px;
+border-radius:5px;
+border:none;
 }
 
 button {
@@ -38,6 +40,8 @@ cursor:pointer;
 border-radius:5px;
 }
 
+button:hover { opacity:0.9; }
+
 .item {
 background:#333;
 padding:10px;
@@ -47,6 +51,7 @@ border-radius:6px;
 
 .score { color:#0f0; }
 .red { color:#ff4d4d; }
+.green { color:#0f0; }
 </style>
 
 </head>
@@ -57,12 +62,14 @@ border-radius:6px;
 
 <h1>🏗️ Build Without Loss</h1>
 
-<!-- LESSON 1 -->
+<!-- LESSON -->
 <div class="card">
-<h2>🎬 Lesson 1 — ليش تختار مقاول غلط؟</h2>
+<h2>🎬 ليش تختار مقاول غلط؟</h2>
 <p>أغلب الناس تختار بناءً على شعور… مو نظام</p>
 
 <input id="name" placeholder="اسم المقاول">
+
+<h3>ليش اخترته؟</h3>
 
 <button onclick="add('راحة')">ارتحت له</button>
 <button onclick="add('توصية')">توصية</button>
@@ -77,27 +84,24 @@ border-radius:6px;
 <div id="list"></div>
 </div>
 
-<!-- LESSON 2 -->
+<!-- DECISION -->
+<div class="card">
+<h2>🏆 القرار النهائي</h2>
+
+<button onclick="decide()">اختار لي الأفضل</button>
+
+<div id="decision"></div>
+</div>
+
+<!-- ERRORS -->
 <div class="card">
 <h2>🧠 أخطاء شائعة</h2>
 
-<p class="red">❌ السعر فقط</p>
+<p class="red">❌ اختيار عاطفي</p>
+<p class="red">❌ الاعتماد على السعر فقط</p>
 <p class="red">❌ التوصية فقط</p>
-<p class="red">❌ الانطباع</p>
 
-<p>السعر الأقل قد يكون الأعلى فعليًا :contentReference[oaicite:1]{index=1}</p>
-
-</div>
-
-<!-- FRAMEWORK -->
-<div class="card">
-<h2>📐 نظام القرار</h2>
-
-<p>1. فرز</p>
-<p>2. تحقق</p>
-<p>3. مقابلة</p>
-<p>4. قرار</p>
-
+<p>السعر الأقل قد يكون الأعلى تكلفة فعليًا</p>
 </div>
 
 </div>
@@ -117,28 +121,36 @@ return;
 
 let score = 0;
 let note = "";
+let behavior = "";
 
+// تحليل
 if(type === "راحة"){
 score = 1;
 note = "اختيار عاطفي ⚠️";
+behavior = "عاطفي";
 }
 else if(type === "توصية"){
 score = 2;
 note = "اعتماد على الآخرين";
+behavior = "تابع";
 }
 else if(type === "سعر"){
 score = 2;
 note = "اختيار مالي";
+behavior = "مالي";
 }
 else if(type === "خبرة"){
 score = 4;
 note = "اختيار واعي";
+behavior = "واعي";
 }
 
-contractors.push({name, score, note});
+contractors.push({name, score, note, behavior});
 
+// حفظ
 localStorage.setItem("contractors", JSON.stringify(contractors));
 
+// تنظيف
 document.getElementById("name").value = "";
 
 render();
@@ -149,6 +161,7 @@ function render(){
 let list = document.getElementById("list");
 list.innerHTML = "";
 
+// ترتيب
 contractors.sort((a,b)=>b.score - a.score);
 
 contractors.forEach(c=>{
@@ -162,6 +175,58 @@ ${c.note}
 });
 }
 
+function decide(){
+
+if(contractors.length === 0){
+document.getElementById("decision").innerHTML =
+"⚠️ ما أضفت أي مقاول";
+return;
+}
+
+// ترتيب
+contractors.sort((a,b)=>b.score - a.score);
+
+let best = contractors[0];
+
+// تحليل السلوك العام
+let behaviors = contractors.map(c => c.behavior);
+
+let emotionalCount = behaviors.filter(b=>b==="عاطفي").length;
+let financialCount = behaviors.filter(b=>b==="مالي").length;
+
+let warning = "";
+
+// تحليل نفسي
+if(emotionalCount > 0){
+warning = "⚠️ واضح أنك تميل للاختيار العاطفي — انتبه هذا أخطر سبب خسارة";
+}
+else if(financialCount > 0){
+warning = "⚠️ واضح أنك تركز على السعر — انتبه السعر قد يكون خدعة";
+}
+else{
+warning = "✅ قراراتك متزنة نسبيًا";
+}
+
+// تحليل الجودة
+let decisionMsg = "";
+
+if(best.score <= 2){
+decisionMsg = "❌ كل خياراتك ضعيفة — لازم تعيد التقييم من البداية";
+}
+else{
+decisionMsg = "🏆 هذا أفضل مقاول بناءً على تقييمك الحالي";
+}
+
+// عرض النتيجة
+document.getElementById("decision").innerHTML = `
+<h3>${best.name}</h3>
+<p>Score: ${best.score}</p>
+<p>${decisionMsg}</p>
+<p>${warning}</p>
+`;
+}
+
+// تشغيل
 render();
 
 </script>
