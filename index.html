@@ -51,6 +51,18 @@ border-radius:6px;
 .best { border:2px solid #22c55e; }
 .worst { border:2px solid #ef4444; }
 
+.tag {
+padding:3px 8px;
+border-radius:5px;
+font-size:12px;
+display:inline-block;
+margin-top:5px;
+}
+
+.risk { background:#ef4444; }
+.over { background:#f59e0b; }
+.smart { background:#22c55e; }
+
 </style>
 
 </head>
@@ -86,7 +98,7 @@ border-radius:6px;
 </div>
 
 <div class="card">
-<h2>🏆 القرار</h2>
+<h2>🏆 القرار النهائي</h2>
 <button onclick="decide()">اختار الأفضل</button>
 <div id="decision"></div>
 </div>
@@ -105,7 +117,7 @@ let clarity = +document.getElementById("clarity").value;
 let org = +document.getElementById("org").value;
 let team = +document.getElementById("team").value;
 
-if(!name || !clarity || !org || !team){
+if(!name || !price || !clarity || !org || !team){
 alert("كمل البيانات");
 return;
 }
@@ -126,24 +138,48 @@ list.innerHTML = "";
 
 if(contractors.length === 0) return;
 
-contractors.sort((a,b)=>b.score - a.score);
+// تحويل السعر رقم
+contractors.forEach(c=>{
+c.priceNum = parseFloat(c.price) || 0;
+});
 
-let bestScore = contractors[0].score;
-let worstScore = contractors[contractors.length-1].score;
+// حساب القيمة
+contractors.forEach(c=>{
+c.value = c.score / c.priceNum;
+});
+
+// ترتيب
+contractors.sort((a,b)=>b.value - a.value);
+
+let bestValue = contractors[0].value;
+let worstScore = Math.min(...contractors.map(c=>c.score));
 
 contractors.forEach(c=>{
 
-let className = "item";
+let tag = "";
+let tagClass = "";
 
-if(c.score === bestScore) className += " best";
-if(c.score === worstScore) className += " worst";
+// التصنيف
+if(c.score <= 6){
+tag = "Risk";
+tagClass = "risk";
+}
+else if(c.value < bestValue * 0.6){
+tag = "Overpriced";
+tagClass = "over";
+}
+else{
+tag = "Smart Choice";
+tagClass = "smart";
+}
 
 list.innerHTML += `
-<div class="${className}">
+<div class="item">
 <b>${c.name}</b><br>
 السعر: ${c.price}<br>
 Score: ${c.score}<br>
-وضوح: ${c.clarity} | تنظيم: ${c.org} | فريق: ${c.team}
+وضوح: ${c.clarity} | تنظيم: ${c.org} | فريق: ${c.team}<br>
+<span class="tag ${tagClass}">${tag}</span>
 </div>
 `;
 });
@@ -156,24 +192,34 @@ document.getElementById("decision").innerHTML = "❌ ما عندك بيانات"
 return;
 }
 
-contractors.sort((a,b)=>b.score - a.score);
+// ترتيب حسب القيمة
+contractors.sort((a,b)=>b.value - a.value);
 
 let best = contractors[0];
 
 let msg = `
-🏆 الأفضل: ${best.name}<br>
-Score: ${best.score}<br><br>
+🏆 <b>${best.name}</b><br>
+Score: ${best.score}<br>
+السعر: ${best.price}<br><br>
 `;
 
+// تحليل القرار
 if(best.score >= 12){
-msg += "✅ مقاول قوي جدًا";
+msg += "🔥 أفضل توازن بين الجودة والسعر";
 }
-else if(best.score >= 8){
-msg += "⚠️ مقبول لكن يحتاج تدقيق";
+else if(best.score >= 9){
+msg += "✅ خيار جيد لكن يحتاج تدقيق";
 }
 else{
-msg += "❌ ضعيف — لا ينصح فيه";
+msg += "⚠️ الخيار الأفضل نسبيًا لكن فيه مخاطرة";
 }
+
+// تحليل السوق
+let cheapest = contractors.reduce((a,b)=>a.priceNum < b.priceNum ? a : b);
+let highest = contractors.reduce((a,b)=>a.priceNum > b.priceNum ? a : b);
+
+msg += `<br><br>💡 الأرخص: ${cheapest.name}`;
+msg += `<br>💡 الأغلى: ${highest.name}`;
 
 document.getElementById("decision").innerHTML = msg;
 }
