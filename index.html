@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>Contractor System</title>
+<title>Contractor Decision System</title>
 
 <style>
 body {
@@ -55,6 +55,25 @@ font-size:12px;
 .delete { background:#ef4444; }
 .edit { background:#f59e0b; }
 
+.tag {
+padding:4px 8px;
+border-radius:5px;
+font-size:12px;
+display:inline-block;
+margin-top:5px;
+}
+
+.risk { background:#ef4444; }
+.over { background:#f59e0b; }
+.smart { background:#22c55e; }
+
+.result-box {
+background:#334155;
+padding:10px;
+border-radius:8px;
+margin-top:10px;
+}
+
 </style>
 
 </head>
@@ -65,6 +84,7 @@ font-size:12px;
 
 <h1>🏗️ Contractor Decision System</h1>
 
+<!-- ADD / EDIT -->
 <div class="card">
 <h2>إضافة / تعديل مقاول</h2>
 
@@ -78,9 +98,19 @@ font-size:12px;
 
 </div>
 
+<!-- LIST -->
 <div class="card">
 <h2>📊 المقاولين</h2>
 <div id="list"></div>
+</div>
+
+<!-- DECISION -->
+<div class="card">
+<h2>🏆 القرار النهائي</h2>
+
+<button onclick="decide()">اختار الأفضل</button>
+
+<div id="decision"></div>
 </div>
 
 </div>
@@ -98,7 +128,10 @@ let clarity = +document.getElementById("clarity").value;
 let org = +document.getElementById("org").value;
 let team = +document.getElementById("team").value;
 
-if(!name) return alert("اكتب الاسم");
+if(!name || !price || !clarity || !org || !team){
+alert("كمل البيانات");
+return;
+}
 
 let score = clarity + org + team;
 
@@ -136,12 +169,12 @@ contractors.sort((a,b)=>b.value - a.value);
 
 let bestValue = contractors[0].value;
 
-contractors.forEach(c=>{
+contractors.forEach((c,index)=>{
 
 let tag = "";
 let cls = "";
 
-// 🔥 التصنيف الحقيقي
+// تصنيف ذكي
 if(c.score < 8){
 tag="Risk";
 cls="risk";
@@ -161,7 +194,10 @@ list.innerHTML += `
 Score: ${c.score}<br>
 السعر: ${c.price}<br>
 Value: ${c.value.toFixed(5)}<br>
-<span class="tag ${cls}">${tag}</span>
+<span class="tag ${cls}">${tag}</span><br>
+
+<button class="small-btn edit" onclick="edit(${index})">تعديل</button>
+<button class="small-btn delete" onclick="remove(${index})">حذف</button>
 </div>
 `;
 });
@@ -198,7 +234,6 @@ document.getElementById("org").value = "";
 document.getElementById("team").value = "";
 }
 
-render();
 function decide(){
 
 if(contractors.length === 0){
@@ -206,36 +241,57 @@ document.getElementById("decision").innerHTML = "❌ ما عندك بيانات"
 return;
 }
 
-// ترتيب حسب القيمة
+// إعادة حساب
+contractors.forEach(c=>{
+c.priceNum = parseFloat(c.price) || 0;
+c.value = c.score / c.priceNum;
+});
+
+// ترتيب
 contractors.sort((a,b)=>b.value - a.value);
 
 let best = contractors[0];
 
-let msg = `
-🏆 الأفضل: <b>${best.name}</b><br>
-Score: ${best.score}<br>
-السعر: ${best.price}<br>
-Value: ${best.value.toFixed(5)}<br><br>
-`;
-
-// تحليل احترافي
-if(best.value > 0.0005){
-msg += "🔥 أفضل توازن بين الجودة والسعر";
-}
-else if(best.score >= 10){
-msg += "⚠️ جودة عالية لكن سعره مبالغ فيه";
-}
-else{
-msg += "❌ لا يوجد خيار قوي — تحتاج إعادة تقييم";
-}
-
-// مقارنة السوق
+// متوسط السوق
+let avgPrice = contractors.reduce((sum,c)=>sum + c.priceNum,0) / contractors.length;
 let cheapest = contractors.reduce((a,b)=>a.priceNum < b.priceNum ? a : b);
 
-msg += `<br><br>💡 الأرخص: ${cheapest.name}`;
+// تحليل ذكي
+let analysis = "";
 
-document.getElementById("decision").innerHTML = msg;
+if(best.score < 8){
+analysis = "❌ هذا المقاول ضعيف حتى لو سعره جيد";
 }
+else if(best.priceNum > avgPrice * 1.3){
+analysis = "🟡 هذا المقاول ممتاز لكن سعره مبالغ فيه";
+}
+else if(best === cheapest && best.score >= 9){
+analysis = "🔥 أفضل صفقة بالسوق (جودة + سعر)";
+}
+else{
+analysis = "✅ أفضل توازن بين الجودة والسعر";
+}
+
+// عرض
+document.getElementById("decision").innerHTML = `
+<div class="result-box">
+<h3>🏆 الأفضل: ${best.name}</h3>
+<p>Score: ${best.score}</p>
+<p>السعر: ${best.price}</p>
+<p>Value: ${best.value.toFixed(5)}</p>
+
+<p>${analysis}</p>
+
+<hr>
+
+<p>💡 الأرخص: ${cheapest.name}</p>
+<p>💡 متوسط السوق: ${Math.round(avgPrice)}</p>
+</div>
+`;
+}
+
+render();
+
 </script>
 
 </body>
